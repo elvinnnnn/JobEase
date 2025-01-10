@@ -1,78 +1,76 @@
-import { Image, StyleSheet, Platform } from "react-native";
-
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import React from "react";
+import { StyleSheet, FlatList, Dimensions } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import JobCard from "../../components/JobCard";
+import { useState } from "react";
 
 export default function HomeScreen() {
+  // dummy data until backend is ready
+  const [jobs, setJobs] = useState([
+    {
+      role: "Intern Sofware Developer",
+      company: "Doshi",
+      site: "/",
+      salary: "$76k-$88k",
+      location: "Sydney",
+    },
+    {
+      role: "Junior Data Analyst",
+      company: "Louie Vuitton",
+      site: "/",
+      salary: "$67k-$76k",
+      location: "Brisbane",
+    },
+    {
+      role: "Help Desk Level 1",
+      company: "GEEZ",
+      site: "/",
+      salary: "$60k-$70k",
+      location: "Melbourne",
+    },
+    {
+      role: "IT Consultant",
+      company: "Louie Vuitton",
+      site: "/",
+      salary: "$81k-$90k",
+      location: "Melbourne",
+    },
+    {
+      role: "UI/UX Designer",
+      company: "GEEZ",
+      site: "/",
+      salary: "$88k-$100k",
+      location: "Sydney",
+    },
+  ]);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ThemedView style={styles.container}>
+      <FlatList
+        style={styles.listContent}
+        data={jobs}
+        renderItem={({ item }) => (
+          <JobCard item={item}>
+            <ThemedText>{item.role}</ThemedText>
+          </JobCard>
+        )}
+      />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   titleContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  listContent: {
+    padding: 8,
+    width: Dimensions.get("window").width,
+    flexGrow: 1,
   },
 });
