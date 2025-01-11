@@ -1,45 +1,44 @@
 import React from "react";
 import { StyleSheet, FlatList, Dimensions } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import JobCard from "../../components/JobCard";
+import JobCard from "../../../components/JobCard";
 import { useState } from "react";
 
 export default function HomeScreen() {
   // dummy data until backend is ready
   const [jobs, setJobs] = useState([
     {
-      role: "Intern Sofware Developer",
+      role: "Intern Software Developer",
       company: "Doshi",
-      site: "/",
+      site: "https://www.google.com",
       salary: "$76k-$88k",
       location: "Sydney",
     },
     {
       role: "Junior Data Analyst",
       company: "Louie Vuitton",
-      site: "/",
+      site: "https://www.google.com",
       salary: "$67k-$76k",
       location: "Brisbane",
     },
     {
       role: "Help Desk Level 1",
       company: "GEEZ",
-      site: "/",
+      site: "https://www.google.com",
       salary: "$60k-$70k",
       location: "Melbourne",
     },
     {
       role: "IT Consultant",
       company: "Louie Vuitton",
-      site: "/",
+      site: "https://www.google.com",
       salary: "$81k-$90k",
       location: "Melbourne",
     },
     {
       role: "UI/UX Designer",
       company: "GEEZ",
-      site: "/",
+      site: "https://www.google.com",
       salary: "$88k-$100k",
       location: "Sydney",
     },
@@ -51,9 +50,9 @@ export default function HomeScreen() {
         style={styles.listContent}
         data={jobs}
         renderItem={({ item }) => (
-          <JobCard item={item}>
-            <ThemedText>{item.role}</ThemedText>
-          </JobCard>
+          <ThemedView>
+            <JobCard item={item} />
+          </ThemedView>
         )}
       />
     </ThemedView>

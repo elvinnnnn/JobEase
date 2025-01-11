@@ -1,11 +1,45 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View, Pressable, Linking } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function JobCard(props: any) {
+  const [opacity, setOpacity] = useState(1);
+
+  const handlePress = () => {
+    Linking.openURL(props.item.site);
+  };
+
+  const handlePressIn = () => {
+    setOpacity(0.8);
+  };
+
+  const handlePressOut = () => {
+    setOpacity(1);
+  };
+
   return (
-    <View style={styles.card}>
-      <View style={styles.cardContent}>{props.children}</View>
-    </View>
+    <Pressable
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      onPress={handlePress}
+      style={{ opacity }}
+    >
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <View style={styles.textContainer}>
+            <ThemedText>{props.item.role}</ThemedText>
+            <ThemedText>{props.item.company}</ThemedText>
+            <ThemedText>{props.item.salary}</ThemedText>
+            <ThemedText>{props.item.location}</ThemedText>
+          </View>
+          <View style={styles.iconContainer}>
+            <Ionicons name="chevron-forward" size={28} color={"#fff"} />
+          </View>
+        </View>
+      </View>
+    </Pressable>
   );
 }
 
@@ -20,9 +54,18 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     marginHorizontal: 4,
     marginVertical: 6,
+    padding: 10,
   },
-  cardContent: {
-    marginHorizontal: 18,
-    marginVertical: 10,
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  textContainer: {
+    flex: 1,
+    alignSelf: "flex-start",
+  },
+  iconContainer: {
+    padding: 10,
   },
 });
