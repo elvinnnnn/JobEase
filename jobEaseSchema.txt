@@ -1,4 +1,7 @@
 <h1>Entity Relationship Model</h1>
+link :
+https://lucid.app/lucidchart/23e7ad21-cb1f-4740-a666-9e5acf65a9b8/edit?invitationId=inv_321f194d-1315-423b-931b-38e718f367d8
+
 
 <h1>Database Schema</h1>
 
