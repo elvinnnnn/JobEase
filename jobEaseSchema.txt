@@ -1,0 +1,68 @@
+<h1>Entity Relationship Model</h1>
+
+<h1>Database Schema</h1>
+
+CREATE TABLE Company (
+  companyID int,
+  companyName varchar(50),
+  industry varchar(50),
+  tags varchar(50),
+  PRIMARY KEY (companyID)
+);
+
+CREATE TABLE JobSource (
+  sourceID int,
+  sourceName varchar(50),
+  dateAdded varchar(50),
+  PRIMARY KEY (sourceID)
+);
+
+CREATE TABLE User (
+  userID int,
+  fName varchar(50),
+  lName varchar(50),
+  joinDate varchar(50),
+  email varchar(150),
+  pwdHash varchar(50),
+  PRIMARY KEY (userID)
+);
+
+CREATE TABLE Application (
+  userID int,
+  jobID int,
+  dateSubmitted varchar(50),
+  status varchar(10),
+  dateUpdated varchar(50),
+  comments varchar(150),
+  PRIMARY KEY (userID, jobID),
+  FOREIGN KEY (userID) REFERENCES User(userID)
+);
+
+CREATE TABLE JobOpportunity (
+  jobID int,
+  listDate varchar(50),
+  closeDate varchar(50),
+  companyID int,
+  companyName varchar(50),
+  sourceID int,
+  jobDescription varchar(150),
+  salaryRange varchar(50),
+  location varchar(50),
+  remoteOption bool,
+  PRIMARY KEY (jobID),
+  FOREIGN KEY (jobID) REFERENCES Application(jobID),
+  FOREIGN KEY (sourceID) REFERENCES JobSource(sourceID),
+  FOREIGN KEY (companyID) REFERENCES Company(companyID)
+);
+
+CREATE TABLE Notification (
+  notifID int,
+  userID int,
+  jobID int,
+  timeStamp varchar(50),
+  isSeen bool,
+  sourceID int,
+  PRIMARY KEY (notifID),
+  FOREIGN KEY (jobID) REFERENCES JobOpportunity(jobID),
+  FOREIGN KEY (userID) REFERENCES User(userID)
+);
