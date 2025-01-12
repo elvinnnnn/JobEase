@@ -1,0 +1,115 @@
+<h1>Entity Relationship Model</h1>
+link :
+https://lucid.app/lucidchart/23e7ad21-cb1f-4740-a666-9e5acf65a9b8/edit?invitationId=inv_321f194d-1315-423b-931b-38e718f367d8
+
+
+<h1>Database Schema</h1>
+
+-----------------------
+--- DATABASE SCHEMA ---
+-----------------------
+CREATE TABLE Company (
+  companyID int,
+  companyName varchar(50),
+  industry varchar(50),
+  tags varchar(50),
+  PRIMARY KEY (companyID)
+);
+
+CREATE TABLE JobSource (
+  sourceID int,
+  sourceName varchar(50),
+  dateAdded varchar(50),
+  PRIMARY KEY (sourceID)
+);
+
+CREATE TABLE User (
+  userID int,
+  fName varchar(50),
+  lName varchar(50),
+  joinDate varchar(50),
+  email varchar(150),
+  pwdHash varchar(50),
+  PRIMARY KEY (userID)
+);
+
+CREATE TABLE Application (
+  userID int,
+  jobID int,
+  dateSubmitted varchar(50),
+  status varchar(10),
+  dateUpdated varchar(50),
+  comments varchar(150),
+  PRIMARY KEY (userID, jobID),
+  FOREIGN KEY (userID) REFERENCES User(userID), 
+  FOREIGN KEY (jobID) REFERENCES JobOpportunity(jobID)
+);
+
+CREATE TABLE JobOpportunity (
+  jobID int,
+  listDate varchar(50),
+  closeDate varchar(50),
+  companyID int,
+  companyName varchar(50),
+  sourceID int,
+  jobDescription varchar(150),
+  salaryRange varchar(50),
+  location varchar(50),
+  remoteOption bool,
+  PRIMARY KEY (jobID),
+  FOREIGN KEY (sourceID) REFERENCES JobSource(sourceID),
+  FOREIGN KEY (companyID) REFERENCES Company(companyID)
+);
+
+CREATE TABLE Notification (
+  notifID int,
+  userID int,
+  jobID int,
+  timeStamp varchar(50),
+  isSeen bool,
+  sourceID int,
+  PRIMARY KEY (notifID),
+  FOREIGN KEY (jobID) REFERENCES JobOpportunity(jobID),
+  FOREIGN KEY (userID) REFERENCES User(userID)
+);
+
+-----------------------
+----- SAMPLE DATA -----
+-----------------------
+select * from JobOpportunity
+-- Insert into Company
+INSERT INTO Company (companyID, companyName, industry, tags) VALUES
+(1, 'TechCorp', 'Technology', 'Innovation, AI'),
+(2, 'FinanceInc', 'Finance', 'Banking, Investments'),
+(3, 'EduWorld', 'Education', 'E-learning, Schools');
+
+-- Insert into JobSource
+INSERT INTO JobSource (sourceID, sourceName, dateAdded) VALUES
+(1, 'LinkedIn', '2025-01-01'),
+(2, 'Indeed', '2025-01-02'),
+(3, 'Monster', '2025-01-03');
+
+-- Insert into User
+INSERT INTO User (userID, fName, lName, joinDate, email, pwdHash) VALUES
+(1, 'John', 'Doe', '2025-01-05', 'john.doe@example.com', 'hash123'),
+(2, 'Jane', 'Smith', '2025-01-06', 'jane.smith@example.com', 'hash456'),
+(3, 'Alice', 'Brown', '2025-01-07', 'alice.brown@example.com', 'hash789');
+
+-- Insert into JobOpportunity
+INSERT INTO JobOpportunity (jobID, listDate, closeDate, companyID, companyName, sourceID, jobDescription, salaryRange, location, remoteOption) VALUES
+(101, '2025-01-08', '2025-02-01', 1, 'TechCorp', 1, 'Software Engineer role focusing on AI development.', '80k-100k', 'New York, NY', true),
+(102, '2025-01-09', '2025-02-10', 2, 'FinanceInc', 2, 'Financial Analyst for global markets.', '60k-85k', 'Boston, MA', false),
+(103, '2025-01-10', '2025-03-01', 3, 'EduWorld', 3, 'Online Education Specialist.', '50k-70k', 'Remote', true);
+
+-- Insert into Application
+INSERT INTO Application (userID, jobID, dateSubmitted, status, dateUpdated, comments) VALUES
+(1, 101, '2025-01-10', 'Submitted', '2025-01-11', 'Excited about this role.'),
+(2, 102, '2025-01-11', 'Under Review', '2025-01-12', 'Looking forward to hearing back.'),
+(3, 103, '2025-01-12', 'Interviewing', '2025-01-13', 'First round scheduled.');
+
+-- Insert into Notification
+INSERT INTO Notification (notifID, userID, jobID, timeStamp, isSeen, sourceID) VALUES
+(1, 1, 101, '2025-01-08 10:00:00', true, 1),
+(2, 2, 102, '2025-01-09 15:00:00', false, 2),
+(3, 3, 103, '2025-01-10 08:30:00', true, 3);
+
