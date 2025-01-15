@@ -1,5 +1,9 @@
 package src.model;
 
+/**
+ * The {@code JobOpportunity} class represents job listings. This is a plain-java object.
+ * Use JobOpportunityDAO for data access operations.
+ */
 public class JobOpportunity {
     private int jobID;
     private String listDate;
