@@ -1,5 +1,7 @@
 package src.model;
 
+import java.util.List;
+
 /**
  * The {@code JobOpportunity} class represents job listings. This is a plain-java object.
  * Use JobOpportunityDAO for data access operations.
@@ -15,7 +17,16 @@ public class JobOpportunity {
     private String location;
     private boolean hasRemoteOption;
 
-    public JobOpportunity() {
+    public JobOpportunity(int jobID, String listDate, String closeDate, Company company, JobSource jobSource, String jobDescription, String salaryRange, String location, boolean hasRemoteOption) {
+        this.jobID = jobID;
+        this.listDate = listDate;
+        this.closeDate = closeDate;
+        this.company = company;
+        this.jobSource = jobSource;
+        this.jobDescription = jobDescription;
+        this.salaryRange = salaryRange;
+        this.location = location;
+        this.hasRemoteOption = hasRemoteOption;
     }
 
     public JobOpportunity(JobOpportunity copy) {
