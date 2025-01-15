@@ -101,15 +101,15 @@ public class JobOpportunity {
         StringBuilder jobString = new StringBuilder();
         jobString.append("(");
         jobString.append(jobID + ", ");
-        jobString.append(listDate + ", ");
-        jobString.append(closeDate + ", ");
-        jobString.append(company.getCompanyID() + ", ");
-        jobString.append(company.getCompanyName() + ", ");
-        jobString.append(jobSource.getSourceID() + ", ");
-        jobString.append(jobDescription + ", ");
-        jobString.append(salaryRange + ", ");
-        jobString.append(location + ", ");
-        jobString.append(hasRemoteOption + ")");
+        jobString.append("'" + listDate + "'" + ", ");
+        jobString.append("'" + closeDate + "'" + ", ");
+        jobString.append("'" + company.getCompanyID() + "'" + ", ");
+        jobString.append("'" + company.getCompanyName() + "'" + ", ");
+        jobString.append("'" + jobSource.getSourceID() + "'" + ", ");
+        jobString.append("'" + jobDescription + "'" + ", ");
+        jobString.append("'" + salaryRange + "'" + ", ");
+        jobString.append("'" + location + "'" + ", ");
+        jobString.append("'" + hasRemoteOption + "'" + ")");
         
         return jobString.toString();
     }

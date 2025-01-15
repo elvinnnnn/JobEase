@@ -16,7 +16,7 @@ public class JobOpportunityDAO {
     private SQLiteDataSource db;
 
     public JobOpportunityDAO() {
-        this.db = new SQLiteDataSource("jdbc:sqlite:jobEaseDB.db");
+        this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB");
     }
 
     public void addJob(JobOpportunity j) {
@@ -29,10 +29,11 @@ public class JobOpportunityDAO {
                                 remoteOption) VALUES 
                     """);
             queryBuilder.append(j.toString());
-            
             String query = queryBuilder.toString();
+            System.out.println(query);
             Statement st = con.createStatement();
             st.executeQuery(query);
+            System.out.println("Success single");
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,10 +57,12 @@ public class JobOpportunityDAO {
             // Remove the last space and comma and replace with semicolon
             queryBuilder.setLength(queryBuilder.length() - 2);
             queryBuilder.append(";");
-            
+
             String query = queryBuilder.toString();
+            System.out.println(query);
             Statement st = con.createStatement();
             st.executeQuery(query);
+            System.out.println("success multiple");
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
