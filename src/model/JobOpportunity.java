@@ -92,9 +92,9 @@ public class JobOpportunity {
         jobString.append(jobID + ", ");
         jobString.append(listDate + ", ");
         jobString.append(closeDate + ", ");
-        jobString.append(company.getID() + ", ");
-        jobString.append(company.getName() + ", ");
-        jobString.append(jobSource.getID() + ", ");
+        jobString.append(company.getCompanyID() + ", ");
+        jobString.append(company.getCompanyName() + ", ");
+        jobString.append(jobSource.getSourceID() + ", ");
         jobString.append(jobDescription + ", ");
         jobString.append(salaryRange + ", ");
         jobString.append(location + ", ");
