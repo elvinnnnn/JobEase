@@ -89,16 +89,16 @@ public class JobOpportunity {
     public String toString() {
         StringBuilder jobString = new StringBuilder();
         jobString.append("(");
-        jobString.append(String.valueOf(jobID) + ", ");
+        jobString.append(jobID + ", ");
         jobString.append(listDate + ", ");
         jobString.append(closeDate + ", ");
-        jobString.append(String.valueOf(company.getID()) + ", ");
-        jobString.append(String.valueOf(company.getName()) + ", ");
-        jobString.append(String.valueOf(jobSource.getID()) + ", ");
+        jobString.append(company.getID() + ", ");
+        jobString.append(company.getName() + ", ");
+        jobString.append(jobSource.getID() + ", ");
         jobString.append(jobDescription + ", ");
         jobString.append(salaryRange + ", ");
         jobString.append(location + ", ");
-        jobString.append(String.valueOf(hasRemoteOption) + ")");
+        jobString.append(hasRemoteOption + ")");
         
         return jobString.toString();
     }
