@@ -30,7 +30,7 @@ public class SQLiteDataSource implements DataSource {
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
         try {
-            return DriverManager.getConnection(url, username, password)
+            return DriverManager.getConnection(url, username, password);
         }
         catch (SQLException e) {
             System.err.println(e.getMessage());
