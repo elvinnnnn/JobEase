@@ -4,6 +4,7 @@ import src.model.JobOpportunity;
 import src.model.dao.SQLiteDataSource;
 
 import java.sql.Statement;
+import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +17,7 @@ public class JobOpportunityDAO {
     private SQLiteDataSource db;
 
     public JobOpportunityDAO() {
-        this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB");
+        this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB.db");
     }
 
     public void addJob(JobOpportunity j) {
@@ -32,7 +33,7 @@ public class JobOpportunityDAO {
             String query = queryBuilder.toString();
             System.out.println(query);
             Statement st = con.createStatement();
-            st.executeQuery(query);
+            st.executeUpdate(query);
             System.out.println("Success single");
             con.close();
         } catch (SQLException e) {
@@ -61,7 +62,7 @@ public class JobOpportunityDAO {
             String query = queryBuilder.toString();
             System.out.println(query);
             Statement st = con.createStatement();
-            st.executeQuery(query);
+            st.executeUpdate(query);
             System.out.println("success multiple");
             con.close();
         } catch (SQLException e) {
