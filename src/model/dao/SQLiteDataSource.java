@@ -17,7 +17,7 @@ public class SQLiteDataSource implements DataSource {
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
         try {
             return DriverManager.getConnection(url);
         } 
@@ -28,7 +28,7 @@ public class SQLiteDataSource implements DataSource {
     }
 
     @Override
-    public Connection getConnection(String username, String password) throws SQLException {
+    public Connection getConnection(String username, String password){
         try {
             return DriverManager.getConnection(url, username, password);
         }
