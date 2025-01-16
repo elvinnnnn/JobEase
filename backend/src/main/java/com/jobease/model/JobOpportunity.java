@@ -1,91 +1,92 @@
 package com.jobease.model;
-import java.util.List;
 
 public class JobOpportunity {
-    private Long id;
+    private int jobID;
     private String listDate;
     private String closeDate;
-    private String companyName;
+    private Company company;
+    private JobSource jobSource;
     private String jobDescription;
-    private List<Integer> salaryRange;
+    private String salaryRange;
     private String location;
-    private boolean isRemote;
+    private boolean hasRemoteOption;
 
-    public JobOpportunity() {
-    }
-
-    public JobOpportunity(String listDate, String closeDate, String companyName, String jobDescription, List<Integer> salaryRange, String location, boolean isRemote) {
+    public JobOpportunity(int jobID, String listDate, String closeDate, Company company, JobSource jobSource, String jobDescription, String salaryRange, String location, boolean hasRemoteOption) {
+        this.jobID = jobID;
         this.listDate = listDate;
         this.closeDate = closeDate;
-        this.companyName = companyName;
+        this.company = company;
+        this.jobSource = jobSource;
         this.jobDescription = jobDescription;
         this.salaryRange = salaryRange;
         this.location = location;
-        this.isRemote = isRemote;
+        this.hasRemoteOption = hasRemoteOption;
     }
 
-    // Getters and setters
-    public Long getId() {
-        return id;
+    public JobOpportunity() {
+
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setJobID(int jobID) {
+        this.jobID = jobID;
+    }
+    public int getJobID() {
+        return this.jobID;
     }
 
+    public void setListDate(String date) {
+        this.listDate = date;
+    }
     public String getListDate() {
-        return listDate;
+        return this.listDate;
     }
 
-    public void setListDate(String listDate) {
-        this.listDate = listDate;
+    public void setCloseDate(String date) {
+        this.closeDate = date;
     }
-
     public String getCloseDate() {
-        return closeDate;
+        return this.closeDate;
     }
 
-    public void setCloseDate(String closeDate) {
-        this.closeDate = closeDate;
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+    public Company getCompany() {
+        return this.company;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public void setJobSource(JobSource jobSource) {
+        this.jobSource = jobSource;
     }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getJobDescription() {
-        return jobDescription;
+    public JobSource getJobSource() {
+        return this.jobSource;
     }
 
     public void setJobDescription(String jobDescription) {
         this.jobDescription = jobDescription;
     }
-
-    public List<Integer> getSalaryRange() {
-        return salaryRange;
+    public String getJobDescription() {
+        return this.jobDescription;
     }
 
-    public void setSalaryRange(List<Integer> salaryRange) {
+    public void setSalaryRange(String salaryRange) {
         this.salaryRange = salaryRange;
     }
-
-    public String getLocation() {
-        return location;
+    public String getSalaryRange() {
+        return this.salaryRange;
     }
 
     public void setLocation(String location) {
         this.location = location;
     }
-
-    public boolean isRemote() {
-        return isRemote;
+    public String getLocation() {
+        return this.location;
     }
 
-    public void setRemote(boolean remote) {
-        isRemote = remote;
+    public void setHasRemoteOption(boolean isRemote) {
+        this.hasRemoteOption = isRemote;
+    }
+    public boolean getHasRemoteOption() {
+        return this.hasRemoteOption;
     }
 }

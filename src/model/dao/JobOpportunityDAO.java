@@ -1,12 +1,11 @@
 package src.model.dao;
 
-import src.model.JobOpportunity;
-import src.model.dao.SQLiteDataSource;
-
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+
+import src.model.JobOpportunity;
 
 /**
  * The {@code JobOpportunityDAO} class is a data access object. 
@@ -21,20 +20,20 @@ public class JobOpportunityDAO {
 
     public void addJob(JobOpportunity j) {
         try {
-            Connection con = db.getConnection();
-            StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("""
-                    INSERT INTO JobOpportunity (jobID, listDate, closeDate, companyID, 
-                                companyName, sourceID, jobDescription, salaryRange, location, 
-                                remoteOption) VALUES 
-                    """);
-            queryBuilder.append(j.toString());
-            String query = queryBuilder.toString();
-            System.out.println(query);
-            Statement st = con.createStatement();
-            st.executeQuery(query);
-            System.out.println("Success single");
-            con.close();
+            try (Connection con = db.getConnection();
+                 Statement st = con.createStatement()) {
+                StringBuilder queryBuilder = new StringBuilder();
+                queryBuilder.append("""
+                        INSERT INTO JobOpportunity (jobID, listDate, closeDate, companyID, 
+                                    companyName, sourceID, jobDescription, salaryRange, location, 
+                                    remoteOption) VALUES 
+                        """);
+                queryBuilder.append(j.toString());
+                String query = queryBuilder.toString();
+                System.out.println(query);
+                st.executeQuery(query);
+                System.out.println("Success single");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -42,28 +41,28 @@ public class JobOpportunityDAO {
 
     public void addJobs(List<JobOpportunity> jobs) {
         try {
-            Connection con = db.getConnection();
-            StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("""
-                    INSERT INTO JobOpportunity (jobID, listDate, closeDate, companyID, 
-                                companyName, sourceID, jobDescription, salaryRange, location, 
-                                remoteOption) VALUES 
-                    """);
-            // Add all jobs to list
-            for (JobOpportunity j : jobs) {
-                queryBuilder.append(j.toString());
-                queryBuilder.append(", ");
-            }
-            // Remove the last space and comma and replace with semicolon
-            queryBuilder.setLength(queryBuilder.length() - 2);
-            queryBuilder.append(";");
+            try (Connection con = db.getConnection();
+                 Statement st = con.createStatement()) {
+                StringBuilder queryBuilder = new StringBuilder();
+                queryBuilder.append("""
+                        INSERT INTO JobOpportunity (jobID, listDate, closeDate, companyID, 
+                                    companyName, sourceID, jobDescription, salaryRange, location, 
+                                    remoteOption) VALUES 
+                        """);
+                // Add all jobs to list
+                for (JobOpportunity j : jobs) {
+                    queryBuilder.append(j.toString());
+                    queryBuilder.append(", ");
+                }
+                // Remove the last space and comma and replace with semicolon
+                queryBuilder.setLength(queryBuilder.length() - 2);
+                queryBuilder.append(";");
 
-            String query = queryBuilder.toString();
-            System.out.println(query);
-            Statement st = con.createStatement();
-            st.executeQuery(query);
-            System.out.println("success multiple");
-            con.close();
+                String query = queryBuilder.toString();
+                System.out.println(query);
+                st.executeQuery(query);
+                System.out.println("success multiple");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
