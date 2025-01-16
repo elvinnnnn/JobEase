@@ -1,8 +1,11 @@
 package src.model.dao;
 
+import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import src.model.JobOpportunity;
@@ -15,7 +18,7 @@ public class JobOpportunityDAO {
     private SQLiteDataSource db;
 
     public JobOpportunityDAO() {
-        this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB");
+        this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB.db");
     }
 
     public void addJob(JobOpportunity j) {
@@ -31,7 +34,7 @@ public class JobOpportunityDAO {
                 queryBuilder.append(j.toString());
                 String query = queryBuilder.toString();
                 System.out.println(query);
-                st.executeQuery(query);
+                st.executeUpdate(query);
                 System.out.println("Success single");
             }
         } catch (SQLException e) {
@@ -60,9 +63,71 @@ public class JobOpportunityDAO {
 
                 String query = queryBuilder.toString();
                 System.out.println(query);
-                st.executeQuery(query);
+                st.executeUpdate(query);
                 System.out.println("success multiple");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<JobOpportunity> getAllJobs() {
+        List<JobOpportunity> jobList = new ArrayList<>();
+        String query = "SELECT * FROM JobOpportunity";
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                JobOpportunity j = new JobOpportunity(
+                    rs.getInt("jobID"), 
+                    rs.getString("listDate"), 
+                    rs.getString("closeDate"), 
+                    rs.getInt("companyID"), 
+                    rs.getString("companyName"), 
+                    rs.getInt("sourceID"), 
+                    rs.getString("jobDescription"), 
+                    rs.getString("salaryRange"), 
+                    rs.getString("location"),
+                    rs.getBoolean("remoteOption")
+                );
+                jobList.add(j);
+            }
+            con.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return jobList;
+    }
+
+    public void deleteJob(int id) {
+        String query = "DELETE FROM JobOpportunity where jobID=" + id;
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteJobs(List<Integer> ids) {
+        String query = "DELETE FROM JobOpportunity where jobID=";
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            for (int id : ids) {
+                st.executeUpdate(query + id);
+            }
+
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

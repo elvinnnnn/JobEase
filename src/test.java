@@ -2,25 +2,15 @@ package src;
 
 import src.model.*;
 import src.model.dao.*;
+import src.controller.JobController;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashSet;
 
 public class test {
     public static void main(String[] args) throws Exception {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:jobeaseDB");
-        Statement st = conn.createStatement();
-        st.executeQuery("""
-                INSERT INTO JobOpportunity (jobID, listDate, closeDate, companyID,
-                companyName, sourceID, jobDescription, salaryRange, location,
-                remoteOption) VALUES
-        (1, '2025-01-10', '2025-02-10', '1', 'Tech Solutions', '1', 'Java Developer', '$60,000 - $80,000', 'Remote', 'true')
-        ;
-                """);
+        JobController JC = new JobController();
         
         // Create test data
         Company company1 = new Company(
@@ -36,8 +26,9 @@ public class test {
             1,
             "2025-01-10",
             "2025-02-10",
-            company1,
-            source1,
+            company1.getCompanyID(),
+            company1.getCompanyName(),
+            source1.getSourceID(),
             "Java Developer",
             "$60,000 - $80,000",
             "Remote",
@@ -48,8 +39,9 @@ public class test {
             2,
             "2025-01-15",
             "2025-02-20",
-            company1,
-            source1,
+            company1.getCompanyID(),
+            company1.getCompanyName(),
+            source1.getSourceID(),
             "Python Developer",
             "$70,000 - $90,000",
             "New York",
@@ -57,9 +49,22 @@ public class test {
         );
 
         // Add test data to the database
-        JobOpportunityDAO jobDao = new JobOpportunityDAO();
-        //jobDao.addJob(job1); // Insert a single job
+        //JobOpportunityDAO jobDao = new JobOpportunityDAO();
+        //JC.addJobOpportunity(job1); // Insert a single job
 
-        //jobDao.addJobs(Arrays.asList(job1, job2)); // Insert multiple jobs
+        //JC.addJobOpportunities(Arrays.asList(job1, job2)); // Insert multiple jobs
+
+        // Read job opportunities from database
+        List<JobOpportunity> list = JC.getAllJobOpportunities();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
+        JC.deleteJobOpportunity(1);
+        JC.deleteJobOpportunity(2); 
+        System.out.println("deleted");
+        list = JC.getAllJobOpportunities();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
     }
 }

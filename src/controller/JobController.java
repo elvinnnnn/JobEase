@@ -10,21 +10,21 @@ public class JobController {
     private JobOpportunityDAO jobDAO;
 
     // Constructor
-    public void JobController() {
-        
+    public JobController() {
+        this.jobDAO = new JobOpportunityDAO();
     }
     /*
      * Add a job opportunity to database
      */
-    public boolean addJobOpportunity(JobOpportunity j) {
-        return jobDAO.addJob(j);
+    public void addJobOpportunity(JobOpportunity j) {
+        jobDAO.addJob(j);
     }
     
     /*
      * Add a list of job opportunities to the database
      */
-    public boolean addJobOpportunities(List<JobOpportunity> jobs) {
-        return jobDAO.addAllJobs(jobs);
+    public void addJobOpportunities(List<JobOpportunity> jobs) {
+        jobDAO.addJobs(jobs);
     }
 
     // READ DATABASE OPERATIONS
@@ -32,7 +32,7 @@ public class JobController {
     /* 
      * Returns all job opportunities in database
      */
-    public List<JobOpportunity> getAllJobs() {
+    public List<JobOpportunity> getAllJobOpportunities() {
 
         return jobDAO.getAllJobs();
     }
@@ -41,7 +41,17 @@ public class JobController {
      * Returns all job opportunities aligned with search condition
      */
 
-    public List<JobOpportunity> getAllJobs(SearchCondition con) {
+    /*public List<JobOpportunity> getAllJobs(SearchCondition con) {
         return jobDAO.getAllJobs(con);
+    }*/
+
+    // DELETE DATABASE OPERATIONS
+
+    public void deleteJobOpportunity(int jobID) {
+        jobDAO.deleteJob(jobID);
     }
+    public void deleteJobOpportunities(List<Integer> jobIDs) {
+        jobDAO.deleteJobs(jobIDs);
+    }
+    
 }
