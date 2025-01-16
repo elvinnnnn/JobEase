@@ -72,31 +72,35 @@ public class JobOpportunityDAO {
         }
     }
 
-    public List<JobOpportunity> getAllJobOpportunities() {
+    public List<JobOpportunity> getAllJobs() {
+        List<JobOpportunity> jobList = new ArrayList<>();
+        String query = "SELECT * FROM JobOpportunity";
+
         try {
-            List<JobOpportunity> jobList = new ArrayList<>();
             Connection con = db.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM JobOpportunity");
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 JobOpportunity j = new JobOpportunity(
                     rs.getInt("jobID"), 
                     rs.getString("listDate"), 
-                    rs.getString("closeDate)"), 
-                    null, 
-                    null, 
-                    null, 
-                    null, 
-                    null, 
-                    false);
+                    rs.getString("closeDate"), 
+                    rs.getInt("companyID"), 
+                    rs.getString("companyName"), 
+                    rs.getInt("sourceID"), 
+                    rs.getString("jobDescription"), 
+                    rs.getString("salaryRange"), 
+                    rs.getString("location"),
+                    rs.getBoolean("remoteOption")
+                );
+                jobList.add(j);
             }
-            // Create CompanyController -> store company list in list of hashMaps
-            // get companymethods
+            con.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return jobList;
     }
 }

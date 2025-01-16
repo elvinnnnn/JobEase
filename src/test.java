@@ -5,6 +5,7 @@ import src.model.dao.*;
 import src.controller.JobController;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashSet;
 
 public class test {
@@ -51,6 +52,13 @@ public class test {
         //JobOpportunityDAO jobDao = new JobOpportunityDAO();
         //JC.addJobOpportunity(job1); // Insert a single job
 
-        JC.addJobOpportunities(Arrays.asList(job1, job2)); // Insert multiple jobs
+        //JC.addJobOpportunities(Arrays.asList(job1, job2)); // Insert multiple jobs
+
+        // Read job opportunities from database
+        List<JobOpportunity> list = JC.getAllJobOpportunities();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
+
     }
 }

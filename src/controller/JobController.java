@@ -31,7 +31,7 @@ public class JobController {
     /* 
      * Returns all job opportunities in database
      */
-    /*public List<JobOpportunity> getAllJobs() {
+    public List<JobOpportunity> getAllJobOpportunities() {
 
         return jobDAO.getAllJobs();
     }
