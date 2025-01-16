@@ -5,6 +5,7 @@ import src.model.dao.*;
 import src.controller.JobController;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashSet;
 
 public class test {
@@ -25,8 +26,9 @@ public class test {
             1,
             "2025-01-10",
             "2025-02-10",
-            company1,
-            source1,
+            company1.getCompanyID(),
+            company1.getCompanyName(),
+            source1.getSourceID(),
             "Java Developer",
             "$60,000 - $80,000",
             "Remote",
@@ -37,8 +39,9 @@ public class test {
             2,
             "2025-01-15",
             "2025-02-20",
-            company1,
-            source1,
+            company1.getCompanyID(),
+            company1.getCompanyName(),
+            source1.getSourceID(),
             "Python Developer",
             "$70,000 - $90,000",
             "New York",
@@ -49,6 +52,19 @@ public class test {
         //JobOpportunityDAO jobDao = new JobOpportunityDAO();
         //JC.addJobOpportunity(job1); // Insert a single job
 
-        JC.addJobOpportunities(Arrays.asList(job1, job2)); // Insert multiple jobs
+        //JC.addJobOpportunities(Arrays.asList(job1, job2)); // Insert multiple jobs
+
+        // Read job opportunities from database
+        List<JobOpportunity> list = JC.getAllJobOpportunities();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
+        JC.deleteJobOpportunity(1);
+        JC.deleteJobOpportunity(2); 
+        System.out.println("deleted");
+        list = JC.getAllJobOpportunities();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
     }
 }

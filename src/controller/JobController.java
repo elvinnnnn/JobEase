@@ -26,12 +26,13 @@ public class JobController {
     public void addJobOpportunities(List<JobOpportunity> jobs) {
         jobDAO.addJobs(jobs);
     }
+
     // READ DATABASE OPERATIONS
 
     /* 
      * Returns all job opportunities in database
      */
-    /*public List<JobOpportunity> getAllJobs() {
+    public List<JobOpportunity> getAllJobOpportunities() {
 
         return jobDAO.getAllJobs();
     }
@@ -43,5 +44,14 @@ public class JobController {
     /*public List<JobOpportunity> getAllJobs(SearchCondition con) {
         return jobDAO.getAllJobs(con);
     }*/
+
+    // DELETE DATABASE OPERATIONS
+
+    public void deleteJobOpportunity(int jobID) {
+        jobDAO.deleteJob(jobID);
+    }
+    public void deleteJobOpportunities(List<Integer> jobIDs) {
+        jobDAO.deleteJobs(jobIDs);
+    }
     
 }
