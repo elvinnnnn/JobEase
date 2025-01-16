@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -68,5 +70,33 @@ public class JobOpportunityDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<JobOpportunity> getAllJobOpportunities() {
+        try {
+            List<JobOpportunity> jobList = new ArrayList<>();
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM JobOpportunity");
+
+            while (rs.next()) {
+                JobOpportunity j = new JobOpportunity(
+                    rs.getInt("jobID"), 
+                    rs.getString("listDate"), 
+                    rs.getString("closeDate)"), 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    null, 
+                    false);
+            }
+            // Create CompanyController -> store company list in list of hashMaps
+            // get companymethods
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
