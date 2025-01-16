@@ -2,8 +2,10 @@ package com.jobease.service;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -66,6 +68,68 @@ public class JobOpportunityService {
             Statement st = con.createStatement();
             st.executeUpdate(query);
             System.out.println("success multiple");
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<JobOpportunity> getAllJobs() {
+        List<JobOpportunity> jobList = new ArrayList<>();
+        String query = "SELECT * FROM JobOpportunity";
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                JobOpportunity j = new JobOpportunity(
+                    rs.getInt("jobID"), 
+                    rs.getString("listDate"), 
+                    rs.getString("closeDate"), 
+                    rs.getInt("companyID"), 
+                    rs.getString("companyName"), 
+                    rs.getInt("sourceID"), 
+                    rs.getString("jobDescription"), 
+                    rs.getString("salaryRange"), 
+                    rs.getString("location"),
+                    rs.getBoolean("remoteOption")
+                );
+                jobList.add(j);
+            }
+            con.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return jobList;
+    }
+
+    public void deleteJob(int id) {
+        String query = "DELETE FROM JobOpportunity where jobID=" + id;
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteJobs(List<Integer> ids) {
+        String query = "DELETE FROM JobOpportunity where jobID=";
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            for (int id : ids) {
+                st.executeUpdate(query + id);
+            }
+
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();

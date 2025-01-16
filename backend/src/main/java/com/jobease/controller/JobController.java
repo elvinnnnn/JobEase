@@ -31,7 +31,7 @@ public class JobController {
 
     @GetMapping("/dbtest")
     public String dbTest() {
-        JobOpportunityService JC = new JobOpportunityService();
+        JobController JC = new JobController();
         
         // Create test data
         Company company1 = new Company(
@@ -47,8 +47,9 @@ public class JobController {
             1,
             "2025-01-10",
             "2025-02-10",
-            company1,
-            source1,
+            company1.getCompanyID(),
+            company1.getCompanyName(),
+            source1.getSourceID(),
             "Java Developer",
             "$60,000 - $80,000",
             "Remote",
@@ -59,16 +60,33 @@ public class JobController {
             2,
             "2025-01-15",
             "2025-02-20",
-            company1,
-            source1,
+            company1.getCompanyID(),
+            company1.getCompanyName(),
+            source1.getSourceID(),
             "Python Developer",
             "$70,000 - $90,000",
             "New York",
             false
         );
 
-        // JC.addJob(job1); // Insert a single job
-        JC.addJobs(Arrays.asList(job1, job2)); // Insert multiple jobs
+        // Add test data to the database
+        //JobOpportunityDAO jobDao = new JobOpportunityDAO();
+        //JC.addJobOpportunity(job1); // Insert a single job
+
+        jobOpportunityService.addJobs(Arrays.asList(job1, job2)); // Insert multiple jobs
+
+        // Read job opportunities from database
+        List<JobOpportunity> list = jobOpportunityService.getAllJobs();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
+        jobOpportunityService.deleteJob(1);
+        jobOpportunityService.deleteJob(2); 
+        System.out.println("deleted");
+        list = jobOpportunityService.getAllJobs();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
         return "dbtest";
     }
 }
