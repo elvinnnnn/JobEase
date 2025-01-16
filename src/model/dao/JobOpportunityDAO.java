@@ -103,4 +103,34 @@ public class JobOpportunityDAO {
         }
         return jobList;
     }
+
+    public void deleteJob(int id) {
+        String query = "DELETE FROM JobOpportunity where jobID=" + id;
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteJobs(List<Integer> ids) {
+        String query = "DELETE FROM JobOpportunity where jobID=";
+
+        try {
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            for (int id : ids) {
+                st.executeUpdate(query + id);
+            }
+
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

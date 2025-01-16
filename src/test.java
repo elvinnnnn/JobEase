@@ -59,6 +59,12 @@ public class test {
         for (JobOpportunity j : list) {
             System.out.println(j);
         }
-
+        JC.deleteJobOpportunity(1);
+        JC.deleteJobOpportunity(2); 
+        System.out.println("deleted");
+        list = JC.getAllJobOpportunities();
+        for (JobOpportunity j : list) {
+            System.out.println(j);
+        }
     }
 }
