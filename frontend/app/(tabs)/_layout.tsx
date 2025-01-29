@@ -1,10 +1,9 @@
-import { Redirect, Tabs, useRouter } from "expo-router";
+import { Slot, Tabs, useRouter } from "expo-router";
 import React, { useEffect } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSession } from "@/hooks/context";
 
@@ -12,11 +11,11 @@ export default function TabLayout() {
   const router = useRouter();
   const { session } = useSession();
 
-  // useEffect(() => {
-  //   if (!session) {
-  //     router.replace("/login");
-  //   }
-  // }, [session, router]);
+  useEffect(() => {
+    if (!session) {
+      router.replace("/");
+    }
+  }, [session, router]);
 
   return (
     <Tabs
@@ -33,7 +32,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="listings"
         options={{
           title: "Listings",
           tabBarIcon: ({ color }) => (

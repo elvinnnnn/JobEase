@@ -7,7 +7,7 @@ import { Slider } from "react-native-awesome-slider";
 import React, { useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-export default function TabTwoScreen() {
+export default function PreferencesScreen() {
   const { signOut } = useSession();
   const [isChecked, setCheck] = useState(false);
   const progress = useSharedValue(20);

@@ -5,14 +5,13 @@ import {
   Dimensions,
   View,
   Pressable,
-  Text,
 } from "react-native";
 import JobCard from "../../components/JobCard";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function HomeScreen() {
+export default function ListingsScreen() {
   // dummy data until backend is ready
   const [jobs, setJobs] = useState([
     {

@@ -34,7 +34,7 @@ export default function Auth() {
 
   const handleSubmit = () => {
     signIn();
-    router.replace("/");
+    router.replace("/(tabs)/listings");
   };
 
   return (
