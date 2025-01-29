@@ -23,16 +23,18 @@ public class JobController {
     @Autowired
     private JobOpportunityService jobOpportunityService;
 
+    // GET request to http://localhost:8080/jobs
+    // This does nothing substantial atm
     @GetMapping
     public String getAllJobOpportunities() throws IOException{
         List<JobOpportunity> jobOpportunities = jobOpportunityService.scrapeJobs();
         return "job opportunities";
     }
 
+    // GET request to http://localhost:8080/jobs/dbtest
+    // Temporary endpoint created to test database operations
     @GetMapping("/dbtest")
     public String dbTest() {
-        JobController JC = new JobController();
-        
         // Create test data
         Company company1 = new Company(
             1,

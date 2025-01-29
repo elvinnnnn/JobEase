@@ -4,7 +4,7 @@ import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useSession } from "../app/ctx";
+import { useSession } from "@/hooks/context";
 import { router } from "expo-router";
 
 const loginSchema = yup.object().shape({

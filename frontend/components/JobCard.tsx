@@ -1,10 +1,22 @@
 import React from "react";
 import { useState } from "react";
-import { StyleSheet, View, Pressable, Linking } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
+import { StyleSheet, View, Pressable, Linking, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Href, router } from "expo-router";
+import { openBrowserAsync } from "expo-web-browser";
+import { Colors } from "@/constants/Colors";
 
-export default function JobCard(props: any) {
+interface Job {
+  id: number;
+  role: string;
+  company: string;
+  site: string;
+  salary: string;
+  location: string;
+  tags: string[];
+}
+
+export default function JobCard(props: { item: Job }) {
   const [opacity, setOpacity] = useState(1);
 
   const handlePress = () => {
@@ -23,20 +35,26 @@ export default function JobCard(props: any) {
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onPress={handlePress}
+      onPress={() => openBrowserAsync(props.item.site)}
       style={{ opacity }}
     >
       <View style={styles.card}>
-        <View style={styles.row}>
-          <View style={styles.textContainer}>
-            <ThemedText>{props.item.role}</ThemedText>
-            <ThemedText>{props.item.company}</ThemedText>
-            <ThemedText>{props.item.salary}</ThemedText>
-            <ThemedText>{props.item.location}</ThemedText>
+        <View style={styles.header}>
+          <Text style={styles.title}>{props.item.role}</Text>
+          <Text style={styles.text}>{props.item.location}</Text>
+        </View>
+
+        <Text style={styles.company}>{props.item.company}</Text>
+
+        <View style={styles.footer}>
+          <View style={styles.tagContainer}>
+            {props.item.tags.map((tag, index) => (
+              <Text key={index} style={styles.tag}>
+                {tag}
+              </Text>
+            ))}
           </View>
-          <View style={styles.iconContainer}>
-            <Ionicons name="chevron-forward" size={28} color={"#fff"} />
-          </View>
+          <Text style={styles.salary}>{props.item.salary}</Text>
         </View>
       </View>
     </Pressable>
@@ -45,6 +63,7 @@ export default function JobCard(props: any) {
 
 const styles = StyleSheet.create({
   card: {
+    display: "flex",
     borderRadius: 6,
     elevation: 3,
     backgroundColor: "#383838",
@@ -56,16 +75,46 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     padding: 10,
   },
-  row: {
+  title: {
+    fontSize: 18,
+    color: Colors.light.text,
+    fontWeight: "bold",
+    paddingBottom: 8,
+  },
+  text: {
+    fontSize: 16,
+    color: Colors.light.text,
+    paddingBottom: 8,
+  },
+  salary: {
+    justifyContent: "flex-end",
+    color: Colors.light.text,
+  },
+  tagContainer: {
+    display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+  },
+  tag: {
+    backgroundColor: Colors.light.text,
+    padding: 5,
+    marginRight: 8,
+    borderRadius: 12,
+  },
+  footer: {
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
-  textContainer: {
-    flex: 1,
-    alignSelf: "flex-start",
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  iconContainer: {
-    padding: 10,
+  company: {
+    fontSize: 16,
+    color: Colors.light.text,
+    paddingBottom: 12,
   },
 });
