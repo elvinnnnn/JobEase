@@ -6,8 +6,50 @@ import { useSharedValue } from "react-native-reanimated";
 import { Slider } from "react-native-awesome-slider";
 import React, { useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useForm, Controller } from "react-hook-form";
+
+interface Preferences {
+  jobType: {
+    fullTime: boolean;
+    partTime: boolean;
+    contract: boolean;
+    internship: boolean;
+    temporary: boolean;
+    other: boolean;
+  };
+  location: {
+    sydney: boolean;
+    melbourne: boolean;
+    brisbane: boolean;
+    adelaide: boolean;
+    canberra: boolean;
+  };
+  experienceLevel: {
+    entry: boolean;
+    associate: boolean;
+    midSenior: boolean;
+    director: boolean;
+    executive: boolean;
+  };
+  remote: {
+    onSite: boolean;
+    remote: boolean;
+    hybrid: boolean;
+  };
+  industry: {
+    informationTechnology: boolean;
+    engineering: boolean;
+    finance: boolean;
+    science: boolean;
+    consulting: boolean;
+    trades: boolean;
+  };
+  distance: number;
+}
 
 export default function PreferencesScreen() {
+  const [preferences, setPreferences] = useState<Preferences>({});
+  const onSubmit = (data: any) => console.log(data);
   const { signOut } = useSession();
   const [isChecked, setCheck] = useState(false);
   const progress = useSharedValue(20);
@@ -18,7 +60,7 @@ export default function PreferencesScreen() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Upload Resume</Text>
+          <Text style={styles.buttonText}>Save Changes</Text>
         </Pressable>
         <View style={styles.preferenceContainer}>
           <Text style={styles.text}>Job Type</Text>
@@ -76,10 +118,10 @@ export default function PreferencesScreen() {
           >
             <Selectable text="Information Technology" />
             <Selectable text="Engineering" />
-            <Selectable text="Quality Assurance" />
-            <Selectable text="Analyst" />
+            <Selectable text="Finance" />
+            <Selectable text="Science" />
             <Selectable text="Consulting" />
-            <Selectable text="Research" />
+            <Selectable text="Trades" />
           </ScrollView>
         </View>
 
