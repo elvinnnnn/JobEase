@@ -5,23 +5,30 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jobease.model.Company;
 import com.jobease.model.JobOpportunity;
 import com.jobease.model.JobSource;
+import com.jobease.model.Preferences;
 import com.jobease.service.JobOpportunityService;
+
 
 
 @RestController
 @RequestMapping("/jobs")
 public class JobController {
 
-    @Autowired
-    private JobOpportunityService jobOpportunityService;
+    private final JobOpportunityService jobOpportunityService;
+
+    public JobController(JobOpportunityService jobOpportunityService) {
+        this.jobOpportunityService = jobOpportunityService;
+    }
 
     // GET request to http://localhost:8080/jobs
     // This does nothing substantial atm
@@ -29,6 +36,11 @@ public class JobController {
     public String getJobOpportunities() throws IOException{
         List<JobOpportunity> jobOpportunities = jobOpportunityService.scrapeJobs();
         return "job opportunities";
+    }
+
+    @PutMapping("/preferences/{id}")
+    public void updatePreferences(@PathVariable String id, @RequestBody Preferences preferences) {
+        
     }
 
     // GET request to http://localhost:8080/jobs/dbtest

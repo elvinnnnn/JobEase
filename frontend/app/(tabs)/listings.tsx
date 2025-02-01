@@ -74,7 +74,7 @@ export default function ListingsScreen() {
   const getJobListings = async () => {
     const prefs = getPrefs();
     try {
-      const response = await axios.post("http://localhost:5000/jobs", prefs);
+      const response = await axios.post("http://localhost:8080/jobs", prefs);
       console.log(response.data);
     } catch (e) {
       console.log("Error occurred when fetching job listings");

@@ -1,12 +1,28 @@
 package com.jobease.model;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
+@Entity
 public class Preferences {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String[] jobType;
     private String location;
     private String[] experienceLevel;
     private boolean remote;
     private String[] industry;
     private int distance;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     public Preferences(String[] jobType, String location, String[] experienceLevel, boolean remote, String[] industry, int distance) {
         this.jobType = jobType;
@@ -63,6 +79,10 @@ public class Preferences {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public void updatePreferences(String id, Preferences preferences) {
+
     }
 
     public String seekUrl() {
