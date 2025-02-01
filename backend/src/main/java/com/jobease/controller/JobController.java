@@ -26,7 +26,7 @@ public class JobController {
     // GET request to http://localhost:8080/jobs
     // This does nothing substantial atm
     @GetMapping
-    public String getAllJobOpportunities() throws IOException{
+    public String getJobOpportunities() throws IOException{
         List<JobOpportunity> jobOpportunities = jobOpportunityService.scrapeJobs();
         return "job opportunities";
     }

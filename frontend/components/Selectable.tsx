@@ -1,12 +1,26 @@
 import { Pressable, Text, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Selectable({ text }: { text: string }) {
-  const [selected, setSelected] = useState(false);
+export default function Selectable({
+  text,
+  onSelect,
+  initial,
+}: {
+  text: string;
+  onSelect: () => void;
+  initial: boolean;
+}) {
+  const [selected, setSelected] = useState(initial);
+  useEffect(() => {
+    setSelected(initial);
+  }, [initial]);
   return (
     <Pressable
       style={selected ? styles.selected : styles.unselected}
-      onPress={() => setSelected(!selected)}
+      onPress={() => {
+        onSelect();
+        setSelected(!selected);
+      }}
     >
       <Text style={styles.text}>{text}</Text>
     </Pressable>

@@ -5,7 +5,7 @@
 
 export const Colors = {
   light: {
-    text: "#f6fff8",
+    text: "#fafafa",
     background: "#6b9080",
     tint: "#f6fff8",
     icon: "#687076",

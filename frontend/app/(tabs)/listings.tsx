@@ -10,6 +10,8 @@ import JobCard from "../../components/JobCard";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 export default function ListingsScreen() {
   // dummy data until backend is ready
@@ -61,9 +63,27 @@ export default function ListingsScreen() {
     },
   ]);
 
+  const getPrefs = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("prefs");
+      console.log(jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {}
+  };
+
+  const getJobListings = async () => {
+    const prefs = getPrefs();
+    try {
+      const response = await axios.post("http://localhost:5000/jobs", prefs);
+      console.log(response.data);
+    } catch (e) {
+      console.log("Error occurred when fetching job listings");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={getPrefs}>
         <Ionicons name="reload" size={32} color="black" />
       </Pressable>
       <FlatList
