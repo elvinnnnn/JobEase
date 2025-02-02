@@ -3,7 +3,11 @@ package com.jobease.service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import com.jobease.dtos.UserDto;
 import com.jobease.model.User;
 import com.jobease.repository.UserRepository;
 
@@ -11,23 +15,31 @@ import com.jobease.repository.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.authenticationManager = authenticationManager;
     }
 
-    public User registerUser(String email, String pwd) {
-        User user = new User(email, passwordEncoder.encode(pwd));
-        return userRepository.save(user);
-    }
-
-    public User loginUser(String email, String pwd) {
-        User user = userRepository.findByEmail(email);
-        if (user != null && passwordEncoder.matches(pwd, user.getPwdHash())) {
-            return user;
+    public User registerUser(UserDto input) {
+        User user = new User(input.getEmail(), passwordEncoder.encode(input.getPassword()));
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Email already exists");
         }
-        return null;
+    }
+
+    public User loginUser(UserDto input) {
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                input.getEmail(),
+                input.getPassword()
+            )
+        );
+        return userRepository.findByEmail(input.getEmail());
     }
 
     public User deleteUser(String email) {

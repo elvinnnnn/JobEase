@@ -1,8 +1,9 @@
 import { useContext, createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "./useStorageState";
+import axios from "axios";
 
 const AuthContext = createContext<{
-  signIn: () => void;
+  signIn: (email: String, password: String) => void;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
@@ -25,9 +26,20 @@ export default function SessionProvider({ children }: PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
+        signIn: async (email: String, password: String) => {
           // Perform sign-in logic here
-          setSession("xxx");
+          try {
+            const response = await axios.post(
+              "http://localhost:8080/register",
+              {
+                email,
+                password,
+              }
+            );
+            console.log(response.data);
+          } catch {
+            console.log("Error occurred when logging in");
+          }
         },
         signOut: () => {
           setSession(null);

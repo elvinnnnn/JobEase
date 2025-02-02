@@ -14,7 +14,7 @@ public class Preferences {
     private Long id;
 
     private String[] jobType;
-    private String location;
+    private String[] locations;
     private String[] experienceLevel;
     private boolean remote;
     private String[] industry;
@@ -24,9 +24,18 @@ public class Preferences {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Preferences(String[] jobType, String location, String[] experienceLevel, boolean remote, String[] industry, int distance) {
+    public Preferences () {
+        this.jobType = new String[]{};
+        this.locations = new String[]{};
+        this.experienceLevel = new String[]{};
+        this.remote = false;
+        this.industry = new String[]{};
+        this.distance = 20;
+    }
+
+    public Preferences(String[] jobType, String[] locations, String[] experienceLevel, boolean remote, String[] industry, int distance) {
         this.jobType = jobType;
-        this.location = location;
+        this.locations = locations;
         this.experienceLevel = experienceLevel;
         this.remote = remote;
         this.industry = industry;
@@ -41,12 +50,12 @@ public class Preferences {
         this.jobType = jobType;
     }
 
-    public String getLocation() {
-        return this.location;
+    public String[] getLocation() {
+        return this.locations;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation(String[] location) {
+        this.locations = location;
     }
 
     public String[] getExperienceLevel() {
@@ -112,7 +121,8 @@ public class Preferences {
         url.append("-jobs");
 
         // handle location preference
-        switch (this.location) {
+        // Seek only allows for one location, so first location in the list will be used.
+        switch (this.locations[0]) {
             case "Sydney" -> url.append("/in-All-Sydney-NSW");
             case "Melbourne" -> url.append("/in-All-Melbourne-VIC");
             case "Brisbane" -> url.append("/in-All-Brisbane-QLD");

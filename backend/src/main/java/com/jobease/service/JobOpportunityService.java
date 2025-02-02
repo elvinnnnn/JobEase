@@ -25,12 +25,12 @@ public class JobOpportunityService {
     public JobOpportunityService() {
         this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB.db");
          String[] jobType = new String[]{}; 
-         String location = "";
+         String[] locations = new String[]{};
          String[] experienceLevel = new String[]{}; 
          boolean remote = false; 
          String[] industry = new String[]{}; 
          int distance = 20; 
-         this.preferences = new Preferences(jobType, location, experienceLevel, remote, industry, distance);
+         this.preferences = new Preferences(jobType, locations, experienceLevel, remote, industry, distance);
     }
 
     public List<JobOpportunity> seekScrape() throws IOException {

@@ -33,7 +33,7 @@ export default function Auth() {
   };
 
   const handleSubmit = () => {
-    signIn();
+    signIn(email, password);
     router.replace("/(tabs)/listings");
   };
 

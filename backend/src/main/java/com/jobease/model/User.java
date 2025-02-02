@@ -1,5 +1,14 @@
 package com.jobease.model;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,27 +29,34 @@ public class User {
     private String fName;
     private String lName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String pwdHash;
+    private String password;
 
-     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    private Date updatedAt;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Preferences preferences;
 
     protected User() {}
 
-    public User(String email, String pwdHash) {
+    public User(String email, String password) {
         this.email = email;
-        this.pwdHash = pwdHash;
+        this.password = password;
     }
 
-    public User(String fName, String lName, String email, String pwdHash) {
+    public User(String fName, String lName, String email, String password) {
         this.fName = fName;
         this.lName = lName;
         this.email = email;
-        this.pwdHash = pwdHash;
+        this.password = password;
     }
 
     public Long getId() {
@@ -63,19 +79,47 @@ public class User {
         this.lName = lName;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getPwdHash() {
-        return this.pwdHash;
+    public void setPwdHash(String password) {
+        this.password = password;
     }
 
-    public void setPwdHash(String pwdHash) {
-        this.pwdHash = pwdHash;
+    // Overrides and UserDetails inheritance required for authentication (spring security tings)
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
