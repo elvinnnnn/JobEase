@@ -15,38 +15,13 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.jobease.model.JobOpportunity;
-import com.jobease.model.Preferences;
 
 @Service
 public class JobOpportunityService {
     private final SQLiteDataSource db;
-    private final Preferences preferences;
 
     public JobOpportunityService() {
         this.db = new SQLiteDataSource("jdbc:sqlite:jobeaseDB.db");
-         String[] jobType = new String[]{}; 
-         String[] locations = new String[]{};
-         String[] experienceLevel = new String[]{}; 
-         boolean remote = false; 
-         String[] industry = new String[]{}; 
-         int distance = 20; 
-         this.preferences = new Preferences(jobType, locations, experienceLevel, remote, industry, distance);
-    }
-
-    public List<JobOpportunity> seekScrape() throws IOException {
-        var seekUrl = this.preferences.seekUrl();
-        Document doc = Jsoup.connect(seekUrl).get();
-        Elements jobTitles = doc.select("a[data-automation=jobTitle]");
-        Elements jobCompanies = doc.select("a[data-automation=jobCompany]");
-        Elements jobLocations = doc.select("a[data-automation=jobLocation]");
-        Elements jobSalaries = doc.select("span[data-automation=jobSalary]");
-        for (int i = 0; i < jobTitles.size(); i++) {
-            System.out.println(jobTitles.get(i).text());
-            System.out.println(jobCompanies.get(i).text());
-            System.out.println(jobLocations.get(i).text());
-            System.out.println(jobSalaries.get(i).text());
-        }
-        return null;
     }
 
     public void addJob(JobOpportunity j) {

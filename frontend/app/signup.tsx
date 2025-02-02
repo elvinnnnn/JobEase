@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -19,18 +18,24 @@ const loginSchema = yup.object().shape({
 });
 
 export default function Auth() {
-  const { signIn, session } = useSession();
+  const { signUp, session } = useSession();
 
   useEffect(() => {
     // This is basic redirect, but jwt token should be checked here
     if (session) {
       router.replace("/(tabs)/listings");
     }
-  }, [signIn]);
+  }, [signUp]);
 
-  const handleSubmit = (values: { email: string; password: string }) => {
-    console.log(values);
-    signIn(values.email, values.password);
+  const handleSubmit = ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    signUp(email, password);
+    router.replace("/");
   };
 
   return (
@@ -84,12 +89,12 @@ export default function Auth() {
               />
             </View>
             <Pressable style={styles.button} onPress={() => handleSubmit()}>
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Register</Text>
             </Pressable>
             <Text style={styles.signUp}>
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Pressable onPress={() => router.replace("/signup")}>
-                <Text style={styles.signUpLink}>Sign Up</Text>
+                <Text style={styles.signUpLink}>Log In</Text>
               </Pressable>
             </Text>
           </View>

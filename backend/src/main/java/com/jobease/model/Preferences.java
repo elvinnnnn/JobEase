@@ -1,11 +1,12 @@
 package com.jobease.model;
-import jakarta.persistence.CascadeType;
+import java.util.Arrays;
+
+import com.jobease.dtos.PreferencesDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Preferences {
@@ -16,24 +17,20 @@ public class Preferences {
     private String[] jobType;
     private String[] locations;
     private String[] experienceLevel;
-    private boolean remote;
+    private String[] remote;
     private String[] industry;
     private int distance;
-
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
 
     public Preferences () {
         this.jobType = new String[]{};
         this.locations = new String[]{};
         this.experienceLevel = new String[]{};
-        this.remote = false;
+        this.remote = new String[]{};
         this.industry = new String[]{};
         this.distance = 20;
     }
 
-    public Preferences(String[] jobType, String[] locations, String[] experienceLevel, boolean remote, String[] industry, int distance) {
+    public Preferences(String[] jobType, String[] locations, String[] experienceLevel, String[] remote, String[] industry, int distance) {
         this.jobType = jobType;
         this.locations = locations;
         this.experienceLevel = experienceLevel;
@@ -66,11 +63,11 @@ public class Preferences {
         this.experienceLevel = experienceLevel;
     }
 
-    public boolean getRemote() {
+    public String[] getRemote() {
         return this.remote;
     }
 
-    public void setRemote(boolean remote) {
+    public void setRemote(String[] remote) {
         this.remote = remote;
     }
 
@@ -90,8 +87,13 @@ public class Preferences {
         this.distance = distance;
     }
 
-    public void updatePreferences(String id, Preferences preferences) {
-
+    public void updatePreferences(PreferencesDto preferences) {
+        this.jobType = preferences.getJobType();
+        this.locations = preferences.getLocation();
+        this.experienceLevel = preferences.getExperienceLevel();
+        this.remote = preferences.getRemote();
+        this.industry = preferences.getIndustry();
+        this.distance = preferences.getDistance();
     }
 
     public String seekUrl() {
@@ -116,7 +118,7 @@ public class Preferences {
         }
 
         // handle remote preference
-        if (this.remote) url.append("remote");
+        if (Arrays.asList(this.remote).contains("remote")) url.append("remote");
 
         url.append("-jobs");
 

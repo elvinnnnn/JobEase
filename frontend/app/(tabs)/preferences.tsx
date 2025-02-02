@@ -5,14 +5,19 @@ import Selectable from "@/components/Selectable";
 import { useSharedValue } from "react-native-reanimated";
 import { Slider } from "react-native-awesome-slider";
 import React, { useState, useEffect } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 export default function PreferencesScreen() {
   const mapping: { [key: string]: string[] } = {
-    jobs: ["Full-time", "Part-time", "Contract", "Internship", "Temporary"],
-    locations: ["Sydney", "Melbourne", "Brisbane", "Adelaide", "Canberra"],
-    experience: ["Entry", "Associate", "Mid-Senior", "Director", "Executive"],
+    jobType: ["Full-time", "Part-time", "Contract", "Internship", "Temporary"],
+    location: ["Sydney", "Melbourne", "Brisbane", "Adelaide", "Canberra"],
+    experienceLevel: [
+      "Entry",
+      "Associate",
+      "Mid-Senior",
+      "Director",
+      "Executive",
+    ],
     remote: ["On-site", "Remote", "Hybrid"],
     industry: [
       "Information Technology",
@@ -28,7 +33,7 @@ export default function PreferencesScreen() {
   const [expPref, setExpPref] = useState<string[]>([]);
   const [remotePref, setRemotePref] = useState<string[]>([]);
   const [industryPref, setIndustryPref] = useState<string[]>([]);
-  const { signOut } = useSession();
+  const { signOut, session } = useSession();
   const progress = useSharedValue(20);
   const min = useSharedValue(0);
   const max = useSharedValue(50);
@@ -36,39 +41,59 @@ export default function PreferencesScreen() {
   useEffect(() => {
     const getPrefs = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem("prefs");
-        if (jsonValue !== null) {
-          const prefs = JSON.parse(jsonValue);
-          setJobPref(prefs["jobs"]);
-          setLocPref(prefs["locations"]);
-          setExpPref(prefs["experience"]);
-          setRemotePref(prefs["remote"]);
-          setIndustryPref(prefs["industry"]);
-          progress.value = prefs["distance"];
-        }
+        const response = await axios.get(
+          "http://192.168.20.5:8080/users/preferences",
+          { headers: { Authorization: `Bearer ${session}` } }
+        );
+        console.log(response.data);
+        const prefs = response.data;
+        setJobPref(prefs["jobType"]);
+        setLocPref(prefs["location"]);
+        setExpPref(prefs["experienceLevel"]);
+        setRemotePref(prefs["remote"]);
+        setIndustryPref(prefs["industry"]);
+        progress.value = prefs["distance"];
       } catch (e) {
         console.log("Error occurred when retrieving the local storage");
       }
     };
     getPrefs();
-    console.log(jobPref.includes(mapping.jobs[0]));
   }, []);
 
   const storePrefs = async () => {
     try {
-      const prefs: { [key: string]: string[] | number } = {};
-      prefs["jobs"] = jobPref;
-      prefs["locations"] = locPref;
-      prefs["experience"] = expPref;
-      prefs["remote"] = remotePref;
-      prefs["industry"] = industryPref;
-      prefs["distance"] = progress.value;
-      const jsonValue = JSON.stringify(prefs);
-      console.log(jsonValue);
-      await AsyncStorage.setItem("prefs", jsonValue);
+      const response = await axios.put(
+        "http://192.168.20.5:8080/users/preferences",
+        {
+          jobType: jobPref,
+          location: locPref,
+          experienceLevel: expPref,
+          remote: remotePref,
+          industry: industryPref,
+          distance: progress.value,
+        },
+        {
+          headers: { Authorization: `Bearer ${session}` },
+        }
+      );
+      console.log(response);
     } catch (e) {
-      console.log("Error occurred when saving the local storage");
+      console.log("Error occurred when saving the local storage", e);
     }
+    // try {
+    //   const prefs: { [key: string]: string[] | number } = {};
+    //   prefs["jobType"] = jobPref;
+    //   prefs["location"] = locPref;
+    //   prefs["experienceLevel"] = expPref;
+    //   prefs["remote"] = remotePref;
+    //   prefs["industry"] = industryPref;
+    //   prefs["distance"] = progress.value;
+    //   const jsonValue = JSON.stringify(prefs);
+    //   console.log(jsonValue);
+    //   await AsyncStorage.setItem("prefs", jsonValue);
+    // } catch (e) {
+    //   console.log("Error occurred when saving the local storage");
+    // }
   };
 
   const updatePref = (pref: string, type: string) => {
@@ -87,7 +112,7 @@ export default function PreferencesScreen() {
             : [...prev, type]
         );
         break;
-      case "experience":
+      case "experienceLevel":
         setExpPref((prev) =>
           prev.includes(type)
             ? prev.filter((item) => item !== type)
@@ -114,17 +139,16 @@ export default function PreferencesScreen() {
   };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Pressable
-          style={styles.button}
-          onPress={() => {
-            signOut();
-          }}
-        >
-          <Text style={styles.buttonText}>Sign Out</Text>
-        </Pressable>
-        {/* <Pressable
+    <View style={styles.container}>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          signOut();
+        }}
+      >
+        <Text style={styles.buttonText}>Sign Out</Text>
+      </Pressable>
+      {/* <Pressable
           style={styles.button}
           onPress={() => {
             AsyncStorage.clear();
@@ -132,141 +156,140 @@ export default function PreferencesScreen() {
         >
           <Text style={styles.buttonText}>Clear Cache</Text>
         </Pressable> */}
-        <View style={styles.preferenceContainer}>
-          <Text style={styles.text}>Job Type</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={styles.optionsContainer}
-          >
-            {mapping["jobs"].map((item, index) => (
+      <View style={styles.preferenceContainer}>
+        <Text style={styles.text}>Job Type</Text>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.optionsContainer}
+        >
+          {mapping["jobType"].map((item, index) => (
+            <Selectable
+              key={index}
+              onSelect={() => updatePref("job", item)}
+              text={item}
+              initial={jobPref.includes(item)}
+            />
+          ))}
+        </ScrollView>
+      </View>
+
+      <View style={styles.preferenceContainer}>
+        <Text style={styles.text}>Location</Text>
+        <View style={styles.optionsContainer}>
+          {mapping["location"].map((item, index) =>
+            locPref.includes(item) ? (
               <Selectable
                 key={index}
-                onSelect={() => updatePref("job", item)}
+                onSelect={() => updatePref("location", item)}
                 text={item}
-                initial={jobPref.includes(item)}
+                initial={true}
               />
-            ))}
-          </ScrollView>
+            ) : (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("location", item)}
+                text={item}
+                initial={false}
+              />
+            )
+          )}
         </View>
-
-        <View style={styles.preferenceContainer}>
-          <Text style={styles.text}>Location</Text>
-          <View style={styles.optionsContainer}>
-            {mapping["locations"].map((item, index) =>
-              locPref.includes(item) ? (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("location", item)}
-                  text={item}
-                  initial={true}
-                />
-              ) : (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("location", item)}
-                  text={item}
-                  initial={false}
-                />
-              )
-            )}
-          </View>
-        </View>
-
-        <View style={styles.preferenceContainer}>
-          <Text style={styles.text}>Experience Level</Text>
-          <View style={styles.optionsContainer}>
-            {mapping["experience"].map((item, index) =>
-              expPref.includes(item) ? (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("experience", item)}
-                  text={item}
-                  initial={true}
-                />
-              ) : (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("experience", item)}
-                  text={item}
-                  initial={false}
-                />
-              )
-            )}
-          </View>
-        </View>
-
-        <View style={styles.preferenceContainer}>
-          <Text style={styles.text}>Remote</Text>
-          <View style={styles.optionsContainer}>
-            {mapping["remote"].map((item, index) =>
-              remotePref.includes(item) ? (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("remote", item)}
-                  text={item}
-                  initial={true}
-                />
-              ) : (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("remote", item)}
-                  text={item}
-                  initial={false}
-                />
-              )
-            )}
-          </View>
-        </View>
-
-        <View style={styles.preferenceContainer}>
-          <Text style={styles.text}>Industry</Text>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            style={styles.optionsContainer}
-          >
-            {mapping["industry"].map((item, index) =>
-              industryPref.includes(item) ? (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("industry", item)}
-                  text={item}
-                  initial={true}
-                />
-              ) : (
-                <Selectable
-                  key={index}
-                  onSelect={() => updatePref("industry", item)}
-                  text={item}
-                  initial={false}
-                />
-              )
-            )}
-          </ScrollView>
-        </View>
-
-        <View style={styles.distance}>
-          <Text style={styles.text}>Distance</Text>
-          <Slider
-            style={styles.slider}
-            progress={progress}
-            minimumValue={min}
-            maximumValue={max}
-            steps={5}
-            forceSnapToStep={true}
-            bubbleContainerStyle={{ display: "none" }}
-            renderMark={({ index }) => (
-              <Text style={styles.mark}>{index * 10}km</Text>
-            )}
-            markStyle={styles.mark}
-          />
-        </View>
-        <Pressable style={styles.button} onPress={storePrefs}>
-          <Text style={styles.buttonText}>Save Changes</Text>
-        </Pressable>
       </View>
-    </GestureHandlerRootView>
+
+      <View style={styles.preferenceContainer}>
+        <Text style={styles.text}>Experience Level</Text>
+        <View style={styles.optionsContainer}>
+          {mapping["experienceLevel"].map((item, index) =>
+            expPref.includes(item) ? (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("experienceLevel", item)}
+                text={item}
+                initial={true}
+              />
+            ) : (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("experienceLevel", item)}
+                text={item}
+                initial={false}
+              />
+            )
+          )}
+        </View>
+      </View>
+
+      <View style={styles.preferenceContainer}>
+        <Text style={styles.text}>Remote</Text>
+        <View style={styles.optionsContainer}>
+          {mapping["remote"].map((item, index) =>
+            remotePref.includes(item) ? (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("remote", item)}
+                text={item}
+                initial={true}
+              />
+            ) : (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("remote", item)}
+                text={item}
+                initial={false}
+              />
+            )
+          )}
+        </View>
+      </View>
+
+      <View style={styles.preferenceContainer}>
+        <Text style={styles.text}>Industry</Text>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          style={styles.optionsContainer}
+        >
+          {mapping["industry"].map((item, index) =>
+            industryPref.includes(item) ? (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("industry", item)}
+                text={item}
+                initial={true}
+              />
+            ) : (
+              <Selectable
+                key={index}
+                onSelect={() => updatePref("industry", item)}
+                text={item}
+                initial={false}
+              />
+            )
+          )}
+        </ScrollView>
+      </View>
+
+      <View style={styles.distance}>
+        <Text style={styles.text}>Distance</Text>
+        <Slider
+          style={styles.slider}
+          progress={progress}
+          minimumValue={min}
+          maximumValue={max}
+          steps={5}
+          forceSnapToStep={true}
+          bubbleContainerStyle={{ display: "none" }}
+          renderMark={({ index }) => (
+            <Text style={styles.mark}>{index * 10}km</Text>
+          )}
+          markStyle={styles.mark}
+        />
+      </View>
+      <Pressable style={styles.button} onPress={storePrefs}>
+        <Text style={styles.buttonText}>Save Changes</Text>
+      </Pressable>
+    </View>
   );
 }
 
