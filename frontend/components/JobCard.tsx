@@ -1,27 +1,21 @@
 import React from "react";
 import { useState } from "react";
 import { StyleSheet, View, Pressable, Linking, Text } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Href, router } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { Colors } from "@/constants/Colors";
 
 interface Job {
   id: number;
-  role: string;
-  company: string;
-  site: string;
-  salary: string;
+  jobTitle: string;
+  companyName: string;
+  jobUrl: string;
+  salaryRange: string;
   location: string;
   tags: string[];
 }
 
 export default function JobCard(props: { item: Job }) {
   const [opacity, setOpacity] = useState(1);
-
-  const handlePress = () => {
-    Linking.openURL(props.item.site);
-  };
 
   const handlePressIn = () => {
     setOpacity(0.8);
@@ -35,26 +29,29 @@ export default function JobCard(props: { item: Job }) {
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      onPress={() => openBrowserAsync(props.item.site)}
+      onPress={() => openBrowserAsync(props.item.jobUrl)}
       style={{ opacity }}
     >
       <View style={styles.card}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{props.item.role}</Text>
-          <Text style={styles.text}>{props.item.location}</Text>
+        <View>
+          <Text style={styles.title}>{props.item.jobTitle}</Text>
+          <Text style={styles.company}>{props.item.companyName}</Text>
         </View>
 
-        <Text style={styles.company}>{props.item.company}</Text>
-
+        {/* <View style={styles.tagContainer}>
+            {props.item.tags
+              ? props.item.tags.map((tag, index) => (
+                  <Text key={index} style={styles.tag}>
+                    {tag}
+                  </Text>
+                ))
+              : null}
+          </View> */}
         <View style={styles.footer}>
-          <View style={styles.tagContainer}>
-            {props.item.tags.map((tag, index) => (
-              <Text key={index} style={styles.tag}>
-                {tag}
-              </Text>
-            ))}
-          </View>
-          <Text style={styles.salary}>{props.item.salary}</Text>
+          <Text style={styles.salary}>
+            {props.item.salaryRange ? props.item.salaryRange : "Unknown Salary"}
+          </Text>
+          <Text style={styles.text}>{props.item.location}</Text>
         </View>
       </View>
     </Pressable>
@@ -74,6 +71,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     marginVertical: 6,
     padding: 10,
+    height: 150,
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 18,
@@ -87,8 +86,10 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   salary: {
-    justifyContent: "flex-end",
-    color: Colors.light.text,
+    backgroundColor: Colors.light.text,
+    padding: 5,
+    marginRight: 8,
+    borderRadius: 12,
   },
   tagContainer: {
     display: "flex",
@@ -101,12 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   footer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  header: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",

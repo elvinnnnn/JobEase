@@ -5,6 +5,7 @@ import {
   Dimensions,
   View,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import JobCard from "../../components/JobCard";
 import { useState } from "react";
@@ -12,70 +13,25 @@ import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useSession } from "@/hooks/context";
 
 export default function ListingsScreen() {
-  // dummy data until backend is ready
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      role: "Intern Software Developer",
-      company: "Doshi",
-      site: "https://www.google.com",
-      salary: "$76k-$88k",
-      location: "Sydney",
-      tags: ["Part-Time", "Internship"],
-    },
-    {
-      id: 2,
-      role: "Junior Data Analyst",
-      company: "Louie Vuitton",
-      site: "https://www.google.com",
-      salary: "$67k-$76k",
-      location: "Brisbane",
-      tags: ["Contract", "Graduate"],
-    },
-    {
-      id: 3,
-      role: "Help Desk Level 1",
-      company: "GEEZ",
-      site: "https://www.google.com",
-      salary: "$60k-$70k",
-      location: "Melbourne",
-      tags: ["Full-Time", "Permanent"],
-    },
-    {
-      id: 4,
-      role: "IT Consultant",
-      company: "Louie Vuitton",
-      site: "https://www.google.com",
-      salary: "$81k-$90k",
-      location: "Melbourne",
-      tags: ["Full-Time", "Permanent"],
-    },
-    {
-      id: 5,
-      role: "UI/UX Designer",
-      company: "GEEZ",
-      site: "https://www.google.com",
-      salary: "$88k-$100k",
-      location: "Sydney",
-      tags: ["Contract", "Permanent"],
-    },
-  ]);
-
-  const getPrefs = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("prefs");
-      console.log(jsonValue);
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {}
-  };
+  const [loading, setLoading] = useState<boolean>(false);
+  const { session } = useSession();
+  const [jobs, setJobs] = useState<any[]>([]);
 
   const getJobListings = async () => {
-    const prefs = getPrefs();
+    setJobs([]);
     try {
-      const response = await axios.post("http://localhost:8080/jobs", prefs);
+      setLoading(true);
+      const response = await axios.post(
+        "http://192.168.20.5:8080/jobs/listings",
+        {},
+        { headers: { Authorization: `Bearer ${session}` } }
+      );
+      setLoading(false);
       console.log(response.data);
+      setJobs((prevJobs) => [...prevJobs, ...response.data]);
     } catch (e) {
       console.log("Error occurred when fetching job listings");
     }
@@ -83,9 +39,14 @@ export default function ListingsScreen() {
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button} onPress={getPrefs}>
-        <Ionicons name="reload" size={32} color="black" />
-      </Pressable>
+      {loading ? (
+        <ActivityIndicator style={styles.loading} />
+      ) : (
+        <Pressable style={styles.button} onPress={getJobListings}>
+          <Ionicons name="reload" size={32} color="black" />
+        </Pressable>
+      )}
+
       <FlatList
         style={styles.listContent}
         data={jobs}
@@ -128,5 +89,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: "bold",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    transform: [{ scale: 1.5 }],
   },
 });

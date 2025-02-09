@@ -99,12 +99,10 @@ public class Preferences {
     public String seekUrl() {
         var url = new StringBuilder("https://www.seek.com.au/");
 
-        // Seek does not have options to filter for experience level, remote, and distance.
-        // Distance will be ignored for location preference, 
-        // and experience level + remote will be concaternated into the search query.
-
-        // handle experience level preference
-        if (this.experienceLevel != null) {
+        // Handle experience level preference
+        boolean hasExpOrRemote = false;
+        if (this.experienceLevel != null && this.experienceLevel.length > 0) {
+            hasExpOrRemote = true;
             for (var level : this.experienceLevel) {
                 switch (level) {
                     case "Entry" -> url.append("-entry-level");
@@ -117,58 +115,71 @@ public class Preferences {
             }
         }
 
-        // handle remote preference
-        if (Arrays.asList(this.remote).contains("remote")) url.append("remote");
-
-        url.append("-jobs");
-
-        // handle location preference
-        // Seek only allows for one location, so first location in the list will be used.
-        switch (this.locations[0]) {
-            case "Sydney" -> url.append("/in-All-Sydney-NSW");
-            case "Melbourne" -> url.append("/in-All-Melbourne-VIC");
-            case "Brisbane" -> url.append("/in-All-Brisbane-QLD");
-            case "Perth" -> url.append("/in-All-Perth-WA");
-            case "Adelaide" -> url.append("/in-All-Adelaide-SA");
-            case "Canberra" -> url.append("/in-All-Canberra-ACT");
-            case "Hobart" -> url.append("/in-All-Hobart-TAS");
-            case "Darwin" -> url.append("/in-All-Darwin-NT");
-            default -> {}
+        // Handle remote preference
+        if (this.remote != null && Arrays.asList(this.remote).contains("remote")) {
+            hasExpOrRemote = true;
+            url.append("-remote");
         }
 
-        url.append("?");
+        if (hasExpOrRemote) {
+            url.append("-jobs");
+        } else url.append("jobs");
 
-        // handle industry preference
-        // due to the amount of seek classifications, only 
-        // IT, Engineering, Finance, Science, Consulting, Trades, and Government will be considered.
-        if (this.industry != null) {
+        // Handle location preference
+        if (this.locations != null && this.locations.length > 0) {
+            switch (this.locations[0]) {
+                case "Sydney" -> url.append("/in-All-Sydney-NSW");
+                case "Melbourne" -> url.append("/in-All-Melbourne-VIC");
+                case "Brisbane" -> url.append("/in-All-Brisbane-QLD");
+                case "Perth" -> url.append("/in-All-Perth-WA");
+                case "Adelaide" -> url.append("/in-All-Adelaide-SA");
+                case "Canberra" -> url.append("/in-All-Canberra-ACT");
+                case "Hobart" -> url.append("/in-All-Hobart-TAS");
+                case "Darwin" -> url.append("/in-All-Darwin-NT");
+                default -> {}
+            }
+        }
+
+        // Handle industry preference
+        boolean hasIndustry = false;
+        if (this.industry != null && this.industry.length > 0) {
             for (var area : this.industry) {
                 switch (area) {
-                    case "IT" -> url.append("6281%2C");
-                    case "Engineering" -> url.append("1209%2C");
-                    case "Finance" -> url.append("1203%2C");
-                    case "Science" -> url.append("1225%2C");
-                    case "Consulting" -> url.append("6076%2C");
-                    case "Trades" -> url.append("1223%2C");
-                    case "Government" -> url.append("1210%2C");
+                    case "IT" -> { url.append("6281%2C"); hasIndustry = true; }
+                    case "Engineering" -> { url.append("1209%2C"); hasIndustry = true; }
+                    case "Finance" -> { url.append("1203%2C"); hasIndustry = true; }
+                    case "Science" -> { url.append("1225%2C"); hasIndustry = true; }
+                    case "Consulting" -> { url.append("6076%2C"); hasIndustry = true; }
+                    case "Trades" -> { url.append("1223%2C"); hasIndustry = true; }
+                    case "Government" -> { url.append("1210%2C"); hasIndustry = true; }
                     default -> {}
                 }
             }
-            url.append("&");
+            if (hasIndustry) url.append("&");
         }
 
-        // handle job type preference
-        if (this.jobType != null) {
+        // Handle job type preference
+        boolean hasJobType = false;
+        if (this.jobType != null && this.jobType.length > 0) {
             for (var type : this.jobType) {
                 switch (type) {
-                    case "Full Time" -> url.append("242%2C");
-                    case "Part Time" -> url.append("243%2C");
-                    case "Contract/Temp" -> url.append("244%2C");
-                    case "Casual/Vacation" -> url.append("245%2C");
+                    case "Full Time" -> { url.append("242%2C"); hasJobType = true; }
+                    case "Part Time" -> { url.append("243%2C"); hasJobType = true; }
+                    case "Contract/Temp" -> { url.append("244%2C"); hasJobType = true; }
+                    case "Casual/Vacation" -> { url.append("245%2C"); hasJobType = true; }
                     default -> {}
                 }
             }
         }
+
+        // Remove trailing "&" or "?" if no parameters were added
+        if (!hasIndustry && !hasJobType) {
+            int lastCharIndex = url.length() - 1;
+            if (url.charAt(lastCharIndex) == '?' || url.charAt(lastCharIndex) == '&') {
+                url.deleteCharAt(lastCharIndex);
+            }
+        }
+
         System.out.println(url.toString());
         return url.toString();
     }

@@ -79,7 +79,7 @@ export default function SessionProvider({ children }: PropsWithChildren) {
             console.log(response.data);
             Notifier.showNotification({
               title: "Thank you for registering!",
-              description: "Login to start browing jobs.",
+              description: "Login to start browsing jobs.",
               duration: 4000,
               showAnimationDuration: 800,
               showEasing: Easing.bounce,

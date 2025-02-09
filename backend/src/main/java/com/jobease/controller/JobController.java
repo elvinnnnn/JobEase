@@ -1,106 +1,33 @@
 package com.jobease.controller;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jobease.model.Company;
-import com.jobease.model.JobOpportunity;
-import com.jobease.model.JobSource;
-import com.jobease.model.Preferences;
+import com.jobease.dtos.OpportunityDto;
 import com.jobease.service.JobOpportunityService;
-
-
+import com.jobease.service.JwtService;
 
 @RestController
 @RequestMapping("/jobs")
 public class JobController {
-
     private final JobOpportunityService jobOpportunityService;
+    private final JwtService jwtService;
 
-    public JobController(JobOpportunityService jobOpportunityService) {
+    public JobController(JobOpportunityService jobOpportunityService, JwtService jwtService) {
+        this.jwtService = jwtService;
         this.jobOpportunityService = jobOpportunityService;
     }
 
-    // GET request to http://localhost:8080/jobs
-    // This does nothing substantial atm
-    @GetMapping
-    public String getJobOpportunities() throws IOException{
-        List<JobOpportunity> jobOpportunities = jobOpportunityService.scrapeJobs();
-        return "job opportunities";
-    }
-
-    @PutMapping("/preferences/{id}")
-    public void updatePreferences(@PathVariable String id, @RequestBody Preferences preferences) {
-        
-    }
-
-    // GET request to http://localhost:8080/jobs/dbtest
-    // Temporary endpoint created to test database operations
-    @GetMapping("/dbtest")
-    public String dbTest() {
-        // Create test data
-        Company company1 = new Company(
-            1,
-            "Tech Solutions",
-            "IT Services",
-            new HashSet<>(Arrays.asList("innovative", "fast-growing"))
-        );
-
-        JobSource source1 = new JobSource(1, "LinkedIn", "2025-01-01");
-
-        JobOpportunity job1 = new JobOpportunity(
-            1,
-            "2025-01-10",
-            "2025-02-10",
-            company1.getCompanyID(),
-            company1.getCompanyName(),
-            source1.getSourceID(),
-            "Java Developer",
-            "$60,000 - $80,000",
-            "Remote",
-            true
-        );
-
-        JobOpportunity job2 = new JobOpportunity(
-            2,
-            "2025-01-15",
-            "2025-02-20",
-            company1.getCompanyID(),
-            company1.getCompanyName(),
-            source1.getSourceID(),
-            "Python Developer",
-            "$70,000 - $90,000",
-            "New York",
-            false
-        );
-
-        // Add test data to the database
-        //JobOpportunityDAO jobDao = new JobOpportunityDAO();
-        //JC.addJobOpportunity(job1); // Insert a single job
-
-        jobOpportunityService.addJobs(Arrays.asList(job1, job2)); // Insert multiple jobs
-
-        // Read job opportunities from database
-        List<JobOpportunity> list = jobOpportunityService.getAllJobs();
-        for (JobOpportunity j : list) {
-            System.out.println(j);
-        }
-        jobOpportunityService.deleteJob(1);
-        jobOpportunityService.deleteJob(2); 
-        System.out.println("deleted");
-        list = jobOpportunityService.getAllJobs();
-        for (JobOpportunity j : list) {
-            System.out.println(j);
-        }
-        return "dbtest";
-    }
+    @PostMapping("/listings")
+    public List<OpportunityDto> postListings(@RequestHeader("Authorization") String token) {
+        System.out.println("Endpoint hit!");
+        String jwt = token.substring(7);
+        String email = jwtService.extractUsername(jwt);
+        System.out.println(email);
+        return jobOpportunityService.scrapeJobs(email);
+    };
 }
