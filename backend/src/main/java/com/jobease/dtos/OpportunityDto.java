@@ -1,14 +1,8 @@
-package com.jobease.model;
+package com.jobease.dtos;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-public class JobOpportunity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class OpportunityDto {
+    private static int counter = 0;
+    private int id;
     private String listDate;
     private String companyName;
     private String jobUrl;
@@ -18,7 +12,8 @@ public class JobOpportunity {
     private String description;
     private boolean hasRemoteOption;
 
-    public JobOpportunity(String listDate, String companyName, String jobUrl, String jobTitle, String salaryRange, String location, String description, boolean hasRemoteOption) {
+    public OpportunityDto(String listDate, String companyName, String jobUrl, String jobTitle, String salaryRange, String location, String description, boolean hasRemoteOption) {
+        this.id = ++counter;
         this.listDate = listDate;
         this.companyName = companyName;
         this.jobUrl = jobUrl;
@@ -29,14 +24,16 @@ public class JobOpportunity {
         this.hasRemoteOption = hasRemoteOption;
     }
 
-    public JobOpportunity(String jobTitle, String company, String location, String salaryRange) {
+    public OpportunityDto(String jobTitle, String company, String location, String salaryRange) {
+        this.id = ++counter;
         this.jobTitle = jobTitle;
         this.companyName = company;
         this.location = location;
         this.salaryRange = salaryRange;
     }
 
-    public JobOpportunity() {
+    public OpportunityDto() {
+        this.id = ++counter;
     }
 
     public void setListDate(String date) {
