@@ -1,45 +1,38 @@
 # JobEase
 
-JobEase is a mobile application designed to provide users with notifications of job offerings that match their preferences and qualifications.
+Welcome to the **JobEase**, a powerful platform designed to streamline your job search process by aggregating job listings from multiple employment sites into one centralized location. No more hopping between different websites—find all your job opportunities in one place!
 
-<h>Parts</h>
-<ul>
-    <li>Scanning websites for job listings</li>
-    <li>Storing website information in database</li>
-    <li>User Application to view / query database</li>
-    <li>Apply Automatically to Jobs</li>
-</ul>
+## Key Features
 
-<h>Use Cases</h>
-<ul>
-    <li>Easy for lazy students to keep up with internship applications</li>
-    <li>More Automation</li>
-</ul>
+### Current Functionalities
 
-<h>Software Architecture</h>
-<h2>Model</h2>
-<ul>
-    <li>Handles all CRUD operations with Database</li>
-</ul>
-Classes:
-<ul>
-    <li>DataBaseConnection
-    <li>Company
-    <li>Application
-    <li>JobOpportunity
-    <li>JobSource
-    <li>User
+- **User Authentication & Authorization**: Secure user login and authorization using JWT tokens.
+- **Customizable Preferences**: Tailor your job search experience with personalized user preferences.
+- **Job Listings**: Access job listings sourced from **SEEK**, one of the leading job search platforms.
 
-<h2>View</h2>
-    <li>Dynamically loaded HTML</li>
-    <li>Anything seen by the User</li>
-    <li>Never requests Database directly</li>
-<h2>Controller</h2>
-    <li>Handles sending requests to database</li>
-    <li>Tells database what it needs</li>
-    <li>Renders/processes response from the database
+### Future Functionalities
 
+- **Saved Jobs**: Save your favorite job listings for easy access later.
+- **Job Listing Persistence**: Enjoy a persistent list of job openings with a dedicated **Recommended Jobs** section.
+- **Live Notifications**: Receive real-time notifications based on intervals defined by your preferences.
+- **Web Scraping**: Expanded job listings from other popular employment sites like **LinkedIn**, **Indeed**, **GradConnection**, and **Jora**.
 
+### AI-Powered Future Functionalities
 
+- **AI-Driven Job Search**: Get more accurate job recommendations based on your uploaded resume.
+- **AI Cover Letter Recommendations**: Receive tailored cover letter suggestions to enhance your applications.
+- **Automatic Applications**: (Pending feasibility due to varying recruitment procedures across companies) Automate the application process for compatible job postings.
 
+## Tech Stack
 
+- **Backend**: Spring Boot
+- **Database**: PostgreSQL
+- **Frontend**: Expo
+
+## Getting Started
+
+To get started with the Job Search Centralized Depository, follow these steps:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/your-username/job-search-depository.git
