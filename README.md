@@ -35,4 +35,4 @@ To get started with the Job Search Centralized Depository, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/job-search-depository.git
+   git clone https://github.com/elvinnnnn/JobEase.git
