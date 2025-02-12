@@ -42,6 +42,7 @@ public class Company {
             this.tags.remove(tag);
         }
     } 
+
     public Set<String> getTags() {
         return this.tags;
     }

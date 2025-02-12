@@ -39,6 +39,10 @@ public class JobOpportunity {
     public JobOpportunity() {
     }
 
+    public Long getId () {
+        return this.id;
+    }
+
     public void setListDate(String date) {
         this.listDate = date;
     }

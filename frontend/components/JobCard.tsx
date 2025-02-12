@@ -37,16 +37,6 @@ export default function JobCard(props: { item: Job }) {
           <Text style={styles.title}>{props.item.jobTitle}</Text>
           <Text style={styles.company}>{props.item.companyName}</Text>
         </View>
-
-        {/* <View style={styles.tagContainer}>
-            {props.item.tags
-              ? props.item.tags.map((tag, index) => (
-                  <Text key={index} style={styles.tag}>
-                    {tag}
-                  </Text>
-                ))
-              : null}
-          </View> */}
         <View style={styles.footer}>
           <Text style={styles.salary}>
             {props.item.salaryRange ? props.item.salaryRange : "Unknown Salary"}

@@ -22,6 +22,11 @@ public class JobController {
         this.jobOpportunityService = jobOpportunityService;
     }
 
+    /**
+     * Endpoint to scrape job opportunities based on user's preferences
+     * @param token
+     * @return A list of job opportunities
+     */
     @PostMapping("/listings")
     public List<OpportunityDto> postListings(@RequestHeader("Authorization") String token) {
         System.out.println("Endpoint hit!");

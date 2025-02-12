@@ -80,20 +80,6 @@ export default function PreferencesScreen() {
     } catch (e) {
       console.log("Error occurred when saving the local storage", e);
     }
-    // try {
-    //   const prefs: { [key: string]: string[] | number } = {};
-    //   prefs["jobType"] = jobPref;
-    //   prefs["location"] = locPref;
-    //   prefs["experienceLevel"] = expPref;
-    //   prefs["remote"] = remotePref;
-    //   prefs["industry"] = industryPref;
-    //   prefs["distance"] = progress.value;
-    //   const jsonValue = JSON.stringify(prefs);
-    //   console.log(jsonValue);
-    //   await AsyncStorage.setItem("prefs", jsonValue);
-    // } catch (e) {
-    //   console.log("Error occurred when saving the local storage");
-    // }
   };
 
   const updatePref = (pref: string, type: string) => {
@@ -148,14 +134,6 @@ export default function PreferencesScreen() {
       >
         <Text style={styles.buttonText}>Sign Out</Text>
       </Pressable>
-      {/* <Pressable
-          style={styles.button}
-          onPress={() => {
-            AsyncStorage.clear();
-          }}
-        >
-          <Text style={styles.buttonText}>Clear Cache</Text>
-        </Pressable> */}
       <View style={styles.preferenceContainer}>
         <Text style={styles.text}>Job Type</Text>
         <ScrollView

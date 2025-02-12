@@ -97,6 +97,14 @@ public class User implements UserDetails{
         this.preferences = preferences;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
     // Overrides and UserDetails inheritance required for authentication (spring security tings)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

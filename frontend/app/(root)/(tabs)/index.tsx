@@ -7,7 +7,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import JobCard from "../../components/JobCard";
+import JobCard from "../../../components/JobCard";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";

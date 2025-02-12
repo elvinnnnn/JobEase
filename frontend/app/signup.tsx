@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  SafeAreaView,
+} from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSession } from "@/hooks/context";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -20,12 +27,7 @@ const loginSchema = yup.object().shape({
 export default function Auth() {
   const { signUp, session } = useSession();
 
-  useEffect(() => {
-    // This is basic redirect, but jwt token should be checked here
-    if (session) {
-      router.replace("/(tabs)/listings");
-    }
-  }, [signUp]);
+  if (session) return <Redirect href="/" />;
 
   const handleSubmit = ({
     email,
@@ -35,11 +37,11 @@ export default function Auth() {
     password: string;
   }) => {
     signUp(email, password);
-    router.replace("/");
+    router.replace("/signin");
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>JobEase</Text>
       <Formik
         validationSchema={loginSchema}
@@ -100,7 +102,7 @@ export default function Auth() {
           </View>
         )}
       </Formik>
-    </View>
+    </SafeAreaView>
   );
 }
 

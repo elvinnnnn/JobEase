@@ -1,8 +1,6 @@
 package com.jobease.dtos;
 
 public class OpportunityDto {
-    private static int counter = 0;
-    private int id;
     private String listDate;
     private String companyName;
     private String jobUrl;
@@ -13,7 +11,6 @@ public class OpportunityDto {
     private boolean hasRemoteOption;
 
     public OpportunityDto(String listDate, String companyName, String jobUrl, String jobTitle, String salaryRange, String location, String description, boolean hasRemoteOption) {
-        this.id = ++counter;
         this.listDate = listDate;
         this.companyName = companyName;
         this.jobUrl = jobUrl;
@@ -25,7 +22,6 @@ public class OpportunityDto {
     }
 
     public OpportunityDto(String jobTitle, String company, String location, String salaryRange) {
-        this.id = ++counter;
         this.jobTitle = jobTitle;
         this.companyName = company;
         this.location = location;
@@ -33,7 +29,6 @@ public class OpportunityDto {
     }
 
     public OpportunityDto() {
-        this.id = ++counter;
     }
 
     public void setListDate(String date) {

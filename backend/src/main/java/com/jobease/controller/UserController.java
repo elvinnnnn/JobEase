@@ -30,12 +30,22 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Endpoint to log a user in
+     * @param user
+     * @return Response entity of the user
+     */
     @PostMapping("/register")
     public ResponseEntity<User> addNewUser (@RequestBody UserDto user) {
         User registeredUser = userService.registerUser(user);
         return ResponseEntity.ok(registeredUser);
     }
 
+    /**
+     * Endpoint to log a user in
+     * @param user
+     * @return JWT token
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser (@RequestBody UserDto user) {
         User authenticatedUser = userService.loginUser(user);
@@ -47,12 +57,23 @@ public class UserController {
         return ResponseEntity.ok(loginResponse);
     }
 
+    /**
+     * Endpoint to delete a user
+     * @param email
+     * @return "Deleted User"
+     */
     @DeleteMapping("/delete")
     public String deleteUser (@RequestParam String email) {
         userService.deleteUser(email);
         return "Deleted User";
     }
 
+    /**
+     * Endpoint to update user's preferences
+     * @param token
+     * @param preferences
+     * @return "Updated Preferences"
+     */
     @PutMapping("/preferences")
     public String updatePreferences (@RequestHeader("Authorization") String token, @RequestBody PreferencesDto preferences) {
         String jwt = token.substring(7);
@@ -61,6 +82,11 @@ public class UserController {
         return "Updated Preferences";
     }
 
+    /**
+     * Endpoint to get user's preferences
+     * @param token
+     * @return User's preferences
+     */
     @GetMapping("/preferences")
     public Preferences getPreferences (@RequestHeader("Authorization") String token) {
         String jwt = token.substring(7);

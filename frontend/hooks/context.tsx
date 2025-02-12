@@ -2,6 +2,7 @@ import { useContext, createContext, type PropsWithChildren } from "react";
 import { useStorageState } from "./useStorageState";
 import axios from "axios";
 import { Notifier, Easing } from "react-native-notifier";
+import { Redirect, router } from "expo-router";
 
 const AuthContext = createContext<{
   signIn: (email: String, password: String) => void;
@@ -93,6 +94,7 @@ export default function SessionProvider({ children }: PropsWithChildren) {
         },
         signOut: () => {
           setSession(null);
+          router.replace("/signin");
         },
         session,
         isLoading,

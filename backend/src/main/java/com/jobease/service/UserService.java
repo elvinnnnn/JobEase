@@ -22,6 +22,11 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    /**
+     * Registers a user with UserDto input {email, password}
+     * @param input
+     * @return User object of the registered user
+     */
     public User registerUser(UserDto input) {
         User user = new User(input.getEmail(), passwordEncoder.encode(input.getPassword()));
         try {
@@ -33,6 +38,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Logs user in with UserDto input {email, password}
+     * @param input
+     * @return User object of the logged in user
+     */
     public User loginUser(UserDto input) {
         User user = userRepository.findByEmail(input.getEmail());
         System.out.println(input.getPassword() + " " + user.getPassword() + " " + passwordEncoder.matches(input.getPassword(), user.getPassword()));
@@ -42,6 +52,11 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Deletes user with specified email
+     * @param email
+     * @return User object of the deleted user
+     */
     public User deleteUser(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
@@ -50,12 +65,22 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Updates a user's (located with email) preferences with a PreferencesDto input
+     * @param email
+     * @param input
+     */
     public void updatePreferences(String email, PreferencesDto input) {
         User user = userRepository.findByEmail(email);
         user.getPreferences().updatePreferences(input);
         userRepository.save(user);
     }
 
+    /**
+     * Gets a user's preferences with specified email
+     * @param email
+     * @return Preferences object of the user
+     */
     public Preferences getPreferences(String email) {
         User user = userRepository.findByEmail(email);
         return user.getPreferences();

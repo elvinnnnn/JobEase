@@ -8,15 +8,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSession } from "@/hooks/context";
 
 export default function TabLayout() {
-  const router = useRouter();
-  const { session } = useSession();
-
-  useEffect(() => {
-    if (!session) {
-      router.replace("/");
-    }
-  }, [session, router]);
-
   return (
     <Tabs
       screenOptions={{
@@ -32,9 +23,10 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="listings"
+        name="index"
         options={{
           title: "Listings",
+
           tabBarIcon: ({ color }) => (
             <Ionicons name="briefcase" size={28} color={color} />
           ),
@@ -45,6 +37,7 @@ export default function TabLayout() {
         name="preferences"
         options={{
           title: "Preferences",
+
           tabBarIcon: ({ color }) => (
             <Ionicons name="person" size={28} color={color} />
           ),

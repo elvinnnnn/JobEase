@@ -14,6 +14,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import SessionProvider from "@/hooks/context";
 import { NotifierWrapper } from "react-native-notifier";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import "./global.css";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,11 +43,7 @@ export default function AppLayout() {
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
             <StatusBar style="auto" />
-            <Stack>
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="signup" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
+            <Stack screenOptions={{ headerShown: false }} />
           </ThemeProvider>
         </SessionProvider>
       </NotifierWrapper>
