@@ -129,7 +129,7 @@ public class JobOpportunityService {
             url.append("?workarrangement=");
             for (var arrangement : preferences.getRemote()) {
                 switch (arrangement) {
-                    case "Onsite" -> url.append("1%2C");
+                    case "On-site" -> url.append("1%2C");
                     case "Remote" -> url.append("2%2C");
                     case "Hybrid" -> url.append("3%2C");
                     default -> {}
@@ -143,7 +143,7 @@ public class JobOpportunityService {
             url.append("?classification=");
             for (var area : preferences.getIndustry()) {
                 switch (area) {
-                    case "IT" -> url.append("6281%2C");
+                    case "Information Technology" -> url.append("6281%2C");
                     case "Engineering" -> url.append("1209%2C");
                     case "Finance" -> url.append("1203%2C");
                     case "Science" -> url.append("1225%2C");
@@ -161,8 +161,8 @@ public class JobOpportunityService {
             url.append("worktype=");
             for (var type : preferences.getJobType()) {
                 switch (type) {
-                    case "Full-Time" -> url.append("242%2C");
-                    case "Part-Time" -> url.append("243%2C");
+                    case "Full-time" -> url.append("242%2C");
+                    case "Part-time" -> url.append("243%2C");
                     case "Contract" -> url.append("244%2C");
                     case "Temporary" -> url.append("244%2C");
                     case "Internship" -> url.append("245%2C"); // This is actually Casual/Vacation in SEEK but we map it to Internship because we don't have that option

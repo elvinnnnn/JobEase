@@ -10,7 +10,16 @@ import axios from "axios";
 export default function PreferencesScreen() {
   const mapping: { [key: string]: string[] } = {
     jobType: ["Full-time", "Part-time", "Contract", "Internship", "Temporary"],
-    location: ["Sydney", "Melbourne", "Brisbane", "Adelaide", "Canberra"],
+    location: [
+      "Sydney",
+      "Melbourne",
+      "Brisbane",
+      "Perth",
+      "Adelaide",
+      "Canberra",
+      "Hobart",
+      "Darwin",
+    ],
     experienceLevel: [
       "Entry",
       "Associate",
@@ -26,6 +35,7 @@ export default function PreferencesScreen() {
       "Science",
       "Consulting",
       "Trades",
+      "Government",
     ],
   };
   const [jobPref, setJobPref] = useState<string[]>([]);

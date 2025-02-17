@@ -81,6 +81,10 @@ public class User implements UserDetails{
         this.lName = lName;
     }
 
+    public String getEmail() {
+        return this.email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

@@ -1,8 +1,6 @@
 package com.jobease.service;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +15,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -45,7 +43,6 @@ public class UserService {
      */
     public User loginUser(UserDto input) {
         User user = userRepository.findByEmail(input.getEmail());
-        System.out.println(input.getPassword() + " " + user.getPassword() + " " + passwordEncoder.matches(input.getPassword(), user.getPassword()));
         if (!passwordEncoder.matches(input.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
